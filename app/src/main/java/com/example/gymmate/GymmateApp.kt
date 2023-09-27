@@ -10,6 +10,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.gymmate.caloriespage.CaloriesPage
 import com.example.gymmate.homepage.Homepage
 import com.example.gymmate.questionpage.QuestionPage
 import com.google.android.material.bottomappbar.BottomAppBar
@@ -45,6 +46,9 @@ private fun GymmateNavHost(
         }
         composable(route = GymmateRoute.QUESTION) {
             QuestionPage(onNavigateUp = {navController.navigate(GymmateRoute.HOME)})
+        }
+        composable(route = GymmateRoute.CALORIES) {
+            CaloriesPage()
         }
     }
 }

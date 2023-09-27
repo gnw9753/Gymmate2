@@ -7,6 +7,7 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.gymmate.homepage.HomepageViewModel
 import com.example.gymmate.questionpage.QuestionPageViewModel
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory
+import com.example.gymmate.caloriespage.CaloriesPageViewModel
 
 
 object AppViewModelProvider {
@@ -16,6 +17,9 @@ object AppViewModelProvider {
         }
         initializer {
             QuestionPageViewModel(gymmateApplication().container.exerciseRepository)
+        }
+        initializer {
+            CaloriesPageViewModel(gymmateApplication().container.exerciseRepository)
         }
     }
 }
