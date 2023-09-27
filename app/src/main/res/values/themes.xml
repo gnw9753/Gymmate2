@@ -13,4 +13,23 @@
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
     </style>
+
+    <style name="MyDialog" parent="Theme.AppCompat.Dialog.Alert">
+
+        <!-- 设置dialog有无标题栏 -->
+        <item name="android:windowNoTitle">true</item>
+        <!-- 设置dialog出现时是否屏幕变黑 -->
+        <item name="android:backgroundDimEnabled">false</item>
+        <!-- 设置window的背景 -->
+        <item name="android:windowBackground">@null</item>
+        <!-- Dialog的windowFrame框为无 -->
+        <item name="android:windowFrame">@null</item>
+        <!-- 是否浮现在activity之上 -->
+        <item name="android:windowIsFloating">false</item>
+        <!-- 是否半透明 -->
+        <item name="android:windowIsTranslucent">false</item>
+        <!-- 设置dialog的背景 -->
+        <item name="android:background">@android:color/background_dark</item>
+    </style>
+
 </resources>

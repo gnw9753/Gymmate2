@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Calories">
+    tools:context=".calories.CaloriesFragment">
 
     <!-- Card view to display the pie chart -->
     <androidx.cardview.widget.CardView
@@ -246,7 +246,7 @@
             <ListView
                 android:id="@+id/lv_latestList"
                 android:layout_width="wrap_content"
-                android:layout_height="250dp"
+                android:layout_height="wrap_content"
                 android:choiceMode="multipleChoice" />
 
             <LinearLayout
@@ -260,28 +260,28 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Calories: 0 cal"
-                    android:textSize="18sp" />
+                    android:textSize="12sp" />
 
                 <TextView
                     android:id="@+id/tv_user_protein"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text=" Protein: 0 g"
-                    android:textSize="18sp" />
+                    android:textSize="12sp" />
 
                 <TextView
                     android:id="@+id/tv_user_carbs"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text=" Carbs: 0 g"
-                    android:textSize="20sp" />
+                    android:textSize="12sp" />
 
                 <TextView
                     android:id="@+id/tv_user_fat"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text=" Fat: 0 g"
-                    android:textSize="18sp" />
+                    android:textSize="12sp" />
             </LinearLayout>
 
             <LinearLayout
@@ -313,7 +313,10 @@
         android:layout_height="wrap_content"
         android:background="@color/white"
         android:orientation="horizontal"
-        app:layout_constraintBottom_toTopOf="@id/buttonBar2">
+        android:layout_below="@+id/cv_latest"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cv_latest">
 
         <Button
             android:id="@+id/btn_addFood"
@@ -333,39 +336,7 @@
             android:textSize="24sp" />
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/buttonBar2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/white"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent">
 
-        <Button
-            android:id="@+id/btn_workout"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Workout"
-            android:textSize="18sp" />
-
-        <Button
-            android:id="@+id/btn_calories"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Calories"
-            android:textSize="18sp" />
-
-        <Button
-            android:id="@+id/btn_review"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Review"
-            android:textSize="18sp" />
-
-    </LinearLayout>
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cv_weightpanel"
@@ -376,7 +347,7 @@
         android:elevation="10dp"
         android:visibility="gone"
         app:cardCornerRadius="10dp"
-        app:layout_constraintBottom_toTopOf="@id/buttonBar2">
+        app:layout_constraintBottom_toTopOf="@id/buttonBar1">
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -448,7 +419,7 @@
         android:elevation="10dp"
         android:visibility="gone"
         app:cardCornerRadius="10dp"
-        app:layout_constraintBottom_toTopOf="@id/buttonBar2">
+        app:layout_constraintBottom_toTopOf="@id/buttonBar1">
 
         <ListView
             android:id="@+id/lv_foodList"
