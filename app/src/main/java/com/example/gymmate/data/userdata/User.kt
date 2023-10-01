@@ -3,6 +3,8 @@ package com.example.gymmate.data.userdata
 import androidx.room.Entity
 import com.example.gymmate.data.exercisedata.ExerciseDay
 
+// This is the data class that will be used to initialize all the data
+
 data class User (
     var user_email: String,
     var user_name: String,

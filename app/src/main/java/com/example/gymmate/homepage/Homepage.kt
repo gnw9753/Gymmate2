@@ -17,6 +17,10 @@ fun Homepage(
     val homePageUiState by viewModel.homePageUiState.collectAsState()
     homePageUiState.exerciseList
     var exerciseDayList = viewModel.exerciseListToExerciseDay()
+
+    // Top horizontal slider // Carousel
+
+    // Logic to decide to display homepage or exercise video page
     LazyColumn(modifier = modifier) {
         items(exerciseDayList) { exercise ->
             DateCardRow(
