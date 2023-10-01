@@ -12,6 +12,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.gymmate.homepage.Homepage
 import com.example.gymmate.questionpage.QuestionPage
+import com.example.gymmatekotlin.screen.SignInScreen
 import com.google.android.material.bottomappbar.BottomAppBar
 
 
@@ -26,7 +27,10 @@ fun GymmateApp(modifier: Modifier = Modifier) {
             .fillMaxSize()
     ) {
         GymmateNavHost(navController = navController, modifier = Modifier.weight(1f))
-        GymmateNavigationBar(selectedDestination = GymmateRoute.HOME, navigateToTopLevelDestination = navigationActions::navigateTo)
+        GymmateNavigationBar(
+            selectedDestination = GymmateRoute.HOME,
+            navigateToTopLevelDestination = navigationActions::navigateTo
+        )
     }
 }
 
@@ -34,7 +38,7 @@ fun GymmateApp(modifier: Modifier = Modifier) {
 private fun GymmateNavHost(
     navController: NavHostController,
     modifier: Modifier = Modifier
-    ) {
+) {
     NavHost(
         navController = navController,
         startDestination = GymmateRoute.QUESTION,
@@ -44,7 +48,10 @@ private fun GymmateNavHost(
             Homepage()
         }
         composable(route = GymmateRoute.QUESTION) {
-            QuestionPage(onNavigateUp = {navController.navigate(GymmateRoute.HOME)})
+            QuestionPage(onNavigateUp = { navController.navigate(GymmateRoute.HOME) })
+        }
+        composable(route = GymmateRoute.SIGNIN) {
+            SignInScreen(navController = navController)
         }
     }
 }
