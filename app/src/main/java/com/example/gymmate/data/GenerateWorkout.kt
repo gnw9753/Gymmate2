@@ -136,6 +136,7 @@ class GenerateWorkout(var user: User, val exerciseList: List<List<String>>){
     fun stringToExercise(exerciseString: List<String>): Exercise {
         // Sorry for my crime, it must be done to initialize the exercise object
         return (Exercise(
+            id = 1,
             "",
             exerciseString[0],
             exerciseString[1],
