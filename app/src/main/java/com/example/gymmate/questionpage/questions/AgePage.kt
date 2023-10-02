@@ -59,12 +59,7 @@ fun AgePage(viewModel: QuestionPageViewModel, modifier: Modifier = Modifier) {
         TextButton(
             onClick = {
                 validate(viewModel.age)
-<<<<<<< Updated upstream
-                //if(!isError)
-                    viewModel.increasePageIndex()
-=======
                 if(!isError) viewModel.increasePageIndex()
->>>>>>> Stashed changes
             },
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)

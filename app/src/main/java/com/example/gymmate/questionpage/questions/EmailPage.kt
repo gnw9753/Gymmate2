@@ -54,11 +54,7 @@ fun EmailPage(
         TextButton(
             onClick = {
                 validate(viewModel.email)
-<<<<<<< Updated upstream
-                //if(!isError)
-=======
                 if(!isError)
->>>>>>> Stashed changes
                     viewModel.increasePageIndex()
             },
             modifier = Modifier

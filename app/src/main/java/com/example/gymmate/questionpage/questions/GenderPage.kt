@@ -35,12 +35,7 @@ fun GenderPage(viewModel: QuestionPageViewModel, modifier: Modifier = Modifier) 
                     if (!viewModel.hasSelectGender) {
                         viewModel.hasSelectGender = true
                         viewModel.male = true
-<<<<<<< Updated upstream
-                    }
-                    else if(viewModel.hasSelectGender && viewModel.male) {
-=======
                     } else if (viewModel.hasSelectGender && viewModel.male) {
->>>>>>> Stashed changes
                         viewModel.hasSelectGender = false
                         viewModel.male = false
                     }
@@ -57,12 +52,7 @@ fun GenderPage(viewModel: QuestionPageViewModel, modifier: Modifier = Modifier) 
                     if (!viewModel.hasSelectGender) {
                         viewModel.hasSelectGender = true
                         viewModel.female = true
-<<<<<<< Updated upstream
-                    }
-                    else if(viewModel.hasSelectGender && viewModel.female) {
-=======
                     } else if (viewModel.hasSelectGender && viewModel.female) {
->>>>>>> Stashed changes
                         viewModel.hasSelectGender = false
                         viewModel.female = false
                     }
@@ -79,12 +69,7 @@ fun GenderPage(viewModel: QuestionPageViewModel, modifier: Modifier = Modifier) 
                     if (!viewModel.hasSelectGender) {
                         viewModel.hasSelectGender = true
                         viewModel.other = true
-<<<<<<< Updated upstream
-                    }
-                    else if(viewModel.hasSelectGender && viewModel.other) {
-=======
                     } else if (viewModel.hasSelectGender && viewModel.other) {
->>>>>>> Stashed changes
                         viewModel.hasSelectGender = false
                         viewModel.other = false
                     }
@@ -99,15 +84,10 @@ fun GenderPage(viewModel: QuestionPageViewModel, modifier: Modifier = Modifier) 
         }
         TextButton(
             onClick = {
-<<<<<<< Updated upstream
-                //if(hasSelect)
-                      viewModel.increasePageIndex()
-=======
                 if (viewModel.hasSelectGender) {
                     viewModel.genderToString()
                     viewModel.increasePageIndex()
                 }
->>>>>>> Stashed changes
             },
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)

@@ -9,13 +9,10 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-<<<<<<< Updated upstream
-=======
 import com.example.gymmate.caloriespage.CaloriesPage
 import com.example.gymmate.homepage.Homepage
 import com.example.gymmate.login.InitializeUserPage
 import com.example.gymmate.login.LoginPage
->>>>>>> Stashed changes
 import com.example.gymmate.questionpage.questions.EmailPage
 import com.example.gymmate.questionpage.questions.NamePage
 import com.example.gymmate.questionpage.QuestionPage
@@ -52,23 +49,6 @@ private fun GymmateNavHost(
 ) {
     NavHost(
         navController = navController,
-<<<<<<< Updated upstream
-        startDestination = GymmateRoute.QUESTION,
-        modifier = modifier,
-    ) {
-        /*
-        composable(route = GymmateRoute.HOME) {
-            Homepage()
-        }*/
-        composable(route = GymmateRoute.QUESTION) {
-            QuestionPage(navigateToHomePage = { navController.navigate(GymmateRoute.HOME) })
-        }
-
-        /*
-        composable(route = GymmateRoute.CALORIES) {
-            CaloriesPage()
-        }*/
-=======
         startDestination = GymmateRoute.LOGIN,
         modifier = modifier,
     ) {
@@ -90,7 +70,6 @@ private fun GymmateNavHost(
         composable(route = GymmateRoute.CALORIES) {
             CaloriesPage()
         }
->>>>>>> Stashed changes
     }
 }
 

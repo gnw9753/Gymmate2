@@ -24,11 +24,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun LoadingPage(
     viewModel: QuestionPageViewModel,
-<<<<<<< Updated upstream
-    navigateToHomePage: () -> Unit,
-=======
     navigateToInitializeScreen: () -> Unit,
->>>>>>> Stashed changes
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
@@ -51,18 +47,6 @@ fun LoadingPage(
         }
 
         LaunchedEffect(Unit) {
-<<<<<<< Updated upstream
-            while (true) {
-                loadingText = "Generating workout" + ".".repeat(dotsCount)
-                dotsCount = (dotsCount + 1) % 4
-                delay(500)
-            }
-        }
-    }
-    coroutineScope.launch {
-
-    }
-=======
             coroutineScope.launch {
                 while (true) {
                     loadingText = "Generating workout" + ".".repeat(dotsCount)
@@ -74,5 +58,4 @@ fun LoadingPage(
         }
     }
     navigateToInitializeScreen()
->>>>>>> Stashed changes
 }

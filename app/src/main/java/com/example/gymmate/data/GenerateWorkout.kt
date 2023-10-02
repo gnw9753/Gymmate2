@@ -136,11 +136,7 @@ class GenerateWorkout(var userId: Int, var goal: String, var daysAvailable: List
     private fun stringToExercise(exerciseString: List<String>): Exercise {
         // Sorry for my crime, it must be done to initialize the exercise object
         return (Exercise(
-<<<<<<< Updated upstream
-            id = 1,
-=======
             id = userId,
->>>>>>> Stashed changes
             "",
             exerciseString[0],
             exerciseString[1],

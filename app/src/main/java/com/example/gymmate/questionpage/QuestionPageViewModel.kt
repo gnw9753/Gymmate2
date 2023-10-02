@@ -1,20 +1,5 @@
 package com.example.gymmate.questionpage
 
-<<<<<<< Updated upstream
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableFloatStateOf
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
-import androidx.lifecycle.ViewModel
-import com.example.gymmate.data.exercisedata.ExerciseRepository
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-
-class QuestionPageViewModel(private val exerciseRepository: ExerciseRepository) : ViewModel() {
-=======
 import android.content.Context
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -44,7 +29,6 @@ class QuestionPageViewModel(
     private val exerciseRepository: ExerciseRepository,
     private val userEntityRepository: UserEntityRepository
 ) : ViewModel() {
->>>>>>> Stashed changes
     /*
     var questionPageUiState by mutableStateOf(QuestionPageUiState())
         private set
@@ -83,12 +67,6 @@ class QuestionPageViewModel(
     var amountSelected by mutableIntStateOf(0)
 
 
-<<<<<<< Updated upstream
-
-    fun increasePageIndex() {
-        if (_uiState.value.pageIndex <= 9) _uiState.value = _uiState.value.copy(pageIndex = _uiState.value.pageIndex + 1)
-        if (_uiState.value.progress < 1f) _uiState.value = _uiState.value.copy(progress = _uiState.value.progress + 0.1f)
-=======
     fun genderToString() {
         gender = if (male) "male"
         else if (female) "female"
@@ -105,19 +83,10 @@ class QuestionPageViewModel(
             _uiState.value.copy(pageIndex = _uiState.value.pageIndex + 1)
         if (_uiState.value.progress < 1f) _uiState.value =
             _uiState.value.copy(progress = _uiState.value.progress + 0.1f)
->>>>>>> Stashed changes
 
     }
 
     fun decreasePageIndex() {
-<<<<<<< Updated upstream
-        if (_uiState.value.pageIndex > 1) _uiState.value = _uiState.value.copy(pageIndex = _uiState.value.pageIndex - 1)
-        if (_uiState.value.progress >= 0.2f) _uiState.value = _uiState.value.copy(progress = _uiState.value.progress - 0.1f)
-    }
-
-    fun setPageIndex(index: Int){
-        if(index in 1..10) {
-=======
         if (_uiState.value.pageIndex > 1) _uiState.value =
             _uiState.value.copy(pageIndex = _uiState.value.pageIndex - 1)
         if (_uiState.value.progress >= 0.2f) _uiState.value =
@@ -126,7 +95,6 @@ class QuestionPageViewModel(
 
     fun setPageIndex(index: Int) {
         if (index in 1..10) {
->>>>>>> Stashed changes
             _uiState.value = uiState.value.copy(pageIndex = index)
         }
     }
@@ -135,13 +103,8 @@ class QuestionPageViewModel(
     // So it can teleport to the page where the data is missing
     // Not too important as there are checks on each page to assure ...
     // the data type needed is received
-<<<<<<< Updated upstream
-    fun validate():Boolean{
-        if(
-=======
     fun validate(): Boolean {
         if (
->>>>>>> Stashed changes
             name.isNotEmpty() &&
             email.isNotEmpty() &&
             (age.toInt() > 0) &&
@@ -150,11 +113,6 @@ class QuestionPageViewModel(
             (height.toFloat() > 0f) &&
             (weight.toFloat() > 0f) &&
             (amountSelected > 1)
-<<<<<<< Updated upstream
-        )return true
-        return false
-    }
-=======
         ) return true
         return false
     }
@@ -223,7 +181,6 @@ class QuestionPageViewModel(
             isInitialized = false
         )
     }
->>>>>>> Stashed changes
 }
 
 data class QuestionPageUiState(
@@ -242,8 +199,5 @@ data class UserDetails(
     var weight: Int = 0,
     var daysAvailable: List<Boolean> = listOf()
 )
-<<<<<<< Updated upstream
-=======
 
 
->>>>>>> Stashed changes

@@ -14,15 +14,10 @@ import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-<<<<<<< Updated upstream
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-=======
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
->>>>>>> Stashed changes
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.gymmate.questionpage.QuestionPageViewModel
@@ -30,10 +25,7 @@ import com.example.gymmate.ui.theme.Typography
 
 @Composable
 fun ConfirmationPage(viewModel: QuestionPageViewModel, modifier: Modifier = Modifier) {
-<<<<<<< Updated upstream
-=======
 
->>>>>>> Stashed changes
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
@@ -179,10 +171,6 @@ fun DisplayDay(viewModel: QuestionPageViewModel, modifier: Modifier = Modifier) 
                         )
                     },
                 )
-<<<<<<< Updated upstream
-
-=======
->>>>>>> Stashed changes
             }
         }
     }

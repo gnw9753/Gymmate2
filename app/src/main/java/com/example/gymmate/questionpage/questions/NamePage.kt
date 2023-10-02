@@ -61,12 +61,7 @@ fun NamePage(viewModel: QuestionPageViewModel, modifier: Modifier = Modifier) {
         TextButton(
             onClick = {
                 validate(viewModel.name)
-<<<<<<< Updated upstream
-                //if(!isError)
-                    viewModel.increasePageIndex()
-=======
                 if(!isError) viewModel.increasePageIndex()
->>>>>>> Stashed changes
             },
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
