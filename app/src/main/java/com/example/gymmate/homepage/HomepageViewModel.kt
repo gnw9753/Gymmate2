@@ -21,7 +21,6 @@ class HomepageViewModel(exerciseRepository: ExerciseRepository) : ViewModel() {
                 initialValue = HomePageUiState()
             )
 
-
     fun exerciseListToExerciseDay(): List<ExerciseDay> {
         val exerciseList = homePageUiState.value.exerciseList
         var exerciseDayList: MutableList<ExerciseDay> = mutableListOf()

@@ -8,6 +8,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.gymmate.AppViewModelProvider
+<<<<<<< Updated upstream
+=======
+import com.example.gymmate.data.userdata.UserInstance
+>>>>>>> Stashed changes
 
 @Composable
 fun Homepage(
@@ -18,6 +22,19 @@ fun Homepage(
     homePageUiState.exerciseList
     var exerciseDayList = viewModel.exerciseListToExerciseDay()
 
+<<<<<<< Updated upstream
+=======
+    var userDayList = UserInstance.currentUser?.exercise_schedule
+    if (userDayList != null) {
+        for (day in userDayList) {
+            println(day)
+            for (exercise in day.exerciseList) {
+                println(exercise.exerciseName)
+            }
+        }
+    }
+
+>>>>>>> Stashed changes
     // Top horizontal slider // Carousel
 
     // Logic to decide to display homepage or exercise video page
@@ -26,7 +43,7 @@ fun Homepage(
             DateCardRow(
                 day = exercise.day,
                 exerciseDay = exercise,
-                )
+            )
         }
     }
 }

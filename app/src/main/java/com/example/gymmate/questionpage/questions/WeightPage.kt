@@ -56,8 +56,12 @@ fun WeightPage(viewModel: QuestionPageViewModel) {
         TextButton(
             onClick = {
                 validate(viewModel.weight)
+<<<<<<< Updated upstream
                 //if(!isError)
                     viewModel.increasePageIndex()
+=======
+                if(!isError) viewModel.increasePageIndex()
+>>>>>>> Stashed changes
             },
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)

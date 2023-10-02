@@ -11,6 +11,9 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface ExerciseDao{
 
+    @Query("SELECT * FROM exercises WHERE id = :id")
+    fun getAllExercisesFromId(id: Int): Flow<List<Exercise>>
+
     @Query("SELECT * FROM exercises")
     fun getAllExercises(): Flow<List<Exercise>>
 

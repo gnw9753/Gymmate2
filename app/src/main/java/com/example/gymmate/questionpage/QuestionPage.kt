@@ -203,6 +203,10 @@ fun CallQuestionPages(index: Int, viewModel: QuestionPageViewModel) {
         }
 
         else -> {
+<<<<<<< Updated upstream
+=======
+            LoadingPage(viewModel, navigateToInitializeScreen = { /*TODO*/ })
+>>>>>>> Stashed changes
         }
     }
 }

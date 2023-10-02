@@ -1,4 +1,4 @@
-package com.example.gymmate.questionpage.questions
+package com.example.gymmate.login
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -8,6 +8,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -16,25 +17,25 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
-import com.example.gymmate.questionpage.QuestionPageViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.gymmate.AppViewModelProvider
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Composable
-fun LoadingPage(
-    viewModel: QuestionPageViewModel,
-<<<<<<< Updated upstream
+fun InitializeUserPage(
     navigateToHomePage: () -> Unit,
-=======
-    navigateToInitializeScreen: () -> Unit,
->>>>>>> Stashed changes
+    initializeUserPageViewModel: InitializeUserPageViewModel = viewModel(factory = AppViewModelProvider.Factory),
     modifier: Modifier = Modifier
 ) {
-    val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
-    var loadingText by remember { mutableStateOf("Generating workout") }
+    val exerciseEntityState by remember { initializeUserPageViewModel.exerciseEntity?.collectAsState() }
+
+    var loadingText by remember { mutableStateOf("") }
     var dotsCount by remember { mutableIntStateOf(0) }
+
+    println("loading page")
+
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
@@ -51,28 +52,19 @@ fun LoadingPage(
         }
 
         LaunchedEffect(Unit) {
-<<<<<<< Updated upstream
             while (true) {
-                loadingText = "Generating workout" + ".".repeat(dotsCount)
+                loadingText = "Loading your profile" + ".".repeat(dotsCount)
                 dotsCount = (dotsCount + 1) % 4
                 delay(500)
             }
         }
     }
-    coroutineScope.launch {
 
-    }
-=======
-            coroutineScope.launch {
-                while (true) {
-                    loadingText = "Generating workout" + ".".repeat(dotsCount)
-                    dotsCount = (dotsCount + 1) % 4
-                    delay(500)
-                }
-            }
-            viewModel.createUserProfile(context)
+    LaunchedEffect(Unit) {
+        coroutineScope.launch {
+            delay(2000)
+            initializeUserPageViewModel.initializeUserProfile()
+            navigateToHomePage()
         }
     }
-    navigateToInitializeScreen()
->>>>>>> Stashed changes
 }

@@ -26,6 +26,7 @@ object GymmateRoute {
     const val CALORIES = "Calories"
     const val CHANGEWORKOUT = "ChangeWorkout"
 
+<<<<<<< Updated upstream
     // Question Pages
     const val NAME = "Name"
     const val EMAIL = "Email"
@@ -36,6 +37,10 @@ object GymmateRoute {
     const val HEIGHT = "Height"
     const val DAY = "Day"
     const val CONFIRM = "Confirmation"
+=======
+    const val LOGIN = "Login"
+    const val INITIALIZEUSER = "InitializeUser"
+>>>>>>> Stashed changes
 
 }
 
