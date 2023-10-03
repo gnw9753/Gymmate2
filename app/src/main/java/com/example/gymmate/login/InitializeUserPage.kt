@@ -29,7 +29,7 @@ fun InitializeUserPage(
     modifier: Modifier = Modifier
 ) {
     val coroutineScope = rememberCoroutineScope()
-    val exerciseEntityState by remember { initializeUserPageViewModel.exerciseEntity?.collectAsState() }
+//    val exerciseEntityState by remember { initializeUserPageViewModel.exerciseEntity?.collectAsState() }
 
     var loadingText by remember { mutableStateOf("") }
     var dotsCount by remember { mutableIntStateOf(0) }

@@ -8,10 +8,8 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.Button
@@ -32,14 +30,11 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.gymmate.AppViewModelProvider
-import com.example.gymmate.data.exercisedata.Exercise
 import com.example.gymmate.ui.theme.Typography
 import com.example.gymmatekotlin.BasicPieChart
 import kotlinx.coroutines.launch
@@ -72,13 +67,13 @@ fun CaloriesPage(
         ) {
             Button(onClick = {
                 openBottomSheet = !openBottomSheet
-            }){
+            }) {
                 Text(text = "Add Food")
             }
             Spacer(modifier = Modifier.weight(1f))
             Button(onClick = {
                 openBottomSheet = !openBottomSheet
-            }){
+            }) {
                 Text(text = "Add Weight")
             }
 
@@ -153,20 +148,125 @@ fun PieCard(modifier: Modifier = Modifier) {
 fun PieCardText(
     //user: User
 ) {
-    Column(
-        modifier = Modifier
-            .padding(5.dp)
-    ) {
-        // Header
-        DisplayText(displayText = "Calories Needed", typography = Typography.headlineSmall)
-        DisplayText(displayText = "2200cal", typography = Typography.bodyMedium)
-        DisplayText(displayText = "Macros", typography = Typography.headlineSmall)
-        DisplayText(displayText = "Protein", typography = Typography.bodyMedium)
-        DisplayText(displayText = "Carbs", typography = Typography.bodyMedium)
-        DisplayText(displayText = "Fat", typography = Typography.bodyMedium)
+    val gender = "Male"
+    val age = 60
+    val goal = "Gain Muscle"
+    if (gender != null && age != null && goal != null) {
+
+        var calorieValue = 0;
+        if (gender == "Male") {
+            if (age <= 14) {
+                if (goal == "Gain Muscle") {
+                    calorieValue = (2500 * 1.1).toInt()
+                } else if (goal == "Lose Weight") {
+                    calorieValue = (2500 - 500)
+                }
+            } else if (age <= 18) {
+                if (goal == "Gain Muscle") {
+                    calorieValue = (3000 * 1.1).toInt()
+                } else if (goal == "Lose Weight") {
+                    calorieValue = (3000 - 500)
+                }
+            } else if (age <= 24) {
+                if (goal == "Gain Muscle") {
+                    calorieValue = (2900 * 1.1).toInt()
+                } else if (goal == "Lose Weight") {
+                    calorieValue = (2900 - 500)
+                }
+            } else if (age <= 50) {
+                if (goal == "Gain Muscle") {
+                    calorieValue = 2900 * 1.1.toInt()
+                } else if (goal == "Lose Weight") {
+                    calorieValue = (2900 - 500)
+                }
+            } else if (age >= 51) {
+                if (goal == "Gain Muscle") {
+                    calorieValue = 3000 * 1.1.toInt()
+                } else if (goal == "Lose Weight") {
+                    calorieValue = (3000 - 500)
+                }
+            }
+        } else {
+            if (age <= 14) {
+                if (goal == "Gain Muscle") {
+                    calorieValue = 2200 * 1.1.toInt()
+                } else if (goal == "Lose Weight") {
+                    calorieValue = (2200 - 500)
+                }
+            } else if (age <= 18) {
+                if (goal == "Gain Muscle") {
+                    calorieValue = 2200 * 1.1.toInt()
+                } else if (goal == "Lose Weight") {
+                    calorieValue = (2200 - 500)
+                }
+            } else if (age <= 24) {
+                if (goal == "Gain Muscle") {
+                    calorieValue = 2200 * 1.1.toInt()
+                } else if (goal == "Lose Weight") {
+                    calorieValue = (2200 - 500)
+                }
+            } else if (age <= 50) {
+                if (goal == "Gain Muscle") {
+                    calorieValue = 2200 * 1.1.toInt()
+                } else if (goal == "Lose Weight") {
+                    calorieValue = (2200 - 500)
+                }
+            } else if (age >= 51) {
+                if (goal == "Gain Muscle") {
+                    calorieValue = 1900 * 1.1.toInt()
+                } else if (goal == "Lose Weight") {
+                    calorieValue = (1900 - 500)
+                }
+
+            }
+        }
+        Column(
+            modifier = Modifier
+                .padding(5.dp)
+        ) {
+            // Header
+            DisplayText(displayText = "Calories Needed", typography = Typography.headlineSmall)
+            DisplayText(displayText = calorieValue.toString(), typography = Typography.bodyMedium)
+            DisplayText(displayText = "Macros", typography = Typography.headlineSmall)
+            DisplayText(
+                displayText = "10~30% " + calculateValue(
+                    calorieValue,
+                    10,
+                    4
+                ).toString() + " ~ " + calculateValue(calorieValue, 30, 4).toString() + "g Protein",
+                typography = Typography.bodyMedium
+            )
+            DisplayText(
+                displayText = "45~65% " + calculateValue(
+                    calorieValue,
+                    45,
+                    4
+                ).toString() + " ~ " + calculateValue(calorieValue, 65, 4).toString() + "g Carbs",
+                typography = Typography.bodyMedium
+            )
+            if (age >= 51) {
+                DisplayText(
+                    displayText = "20~35% " + calculateValue(
+                        calorieValue,
+                        20,
+                        9
+                    ).toString() + " ~ " + calculateValue(calorieValue, 35, 9).toString() + "g Fat",
+                    typography = Typography.bodyMedium
+                )
+            } else {
+                DisplayText(
+                    displayText = "20~35% " + calculateValue(
+                        calorieValue,
+                        20,
+                        9
+                    ).toString() + " ~ " + calculateValue(calorieValue, 35, 9).toString() + "g Fat",
+                    typography = Typography.bodyMedium
+                )
+
+            }
+        }
     }
 }
-
 /////////////////////
 // End of Pie card //
 /////////////////////
@@ -251,8 +351,8 @@ fun QuickAddCard(modifier: Modifier = Modifier) {
             )
             var foodList = listOf("burger", "big burger", "cheese burger")
             var count = 0
-            for(food in foodList){
-                if(count > 2) break
+            for (food in foodList) {
+                if (count > 2) break
                 food?.let {
                     QuickAddRow(food = it)
                 }
@@ -263,9 +363,10 @@ fun QuickAddCard(modifier: Modifier = Modifier) {
 
 @Composable
 fun QuickAddRow(food: String, modifier: Modifier = Modifier) {
-    Row(modifier = Modifier
-        .fillMaxWidth()
-    ){
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+    ) {
         Text(
             text = food,
             style = Typography.displaySmall,
@@ -297,4 +398,9 @@ fun DisplayText(displayText: String, typography: TextStyle, modifier: Modifier =
         style = typography,
         modifier = modifier
     )
+}
+
+fun calculateValue(doubleValue: Int, rate: Int, divide: Int): Int {
+    // Calculate the result
+    return (rate * doubleValue / 100 / divide)
 }

@@ -11,6 +11,8 @@ import com.example.gymmate.data.GenerateWorkout
 import com.example.gymmate.data.ReadExerciseCSV
 import com.example.gymmate.data.exercisedata.ExerciseDay
 import com.example.gymmate.data.userdata.User
+import com.example.gymmate.homepage.Homepage
+import com.example.gymmate.login.LoginPage
 import com.example.gymmate.questionpage.QuestionPage
 import com.example.gymmate.ui.theme.Theme
 
@@ -21,7 +23,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             Theme(darkTheme = false) {
-                GymmateApp()
+                CaloriesPage()
             }
         }
     }
