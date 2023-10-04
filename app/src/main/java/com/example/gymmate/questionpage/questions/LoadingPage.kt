@@ -54,8 +54,13 @@ fun LoadingPage(
                     delay(500)
                 }
             }
-            viewModel.createUserProfile(context)
         }
     }
-    navigateToInitializeScreen()
+    LaunchedEffect(Unit) {
+        coroutineScope.launch {
+            viewModel.createUserProfile(context)
+            delay(2000)
+            navigateToInitializeScreen()
+        }
+    }
 }

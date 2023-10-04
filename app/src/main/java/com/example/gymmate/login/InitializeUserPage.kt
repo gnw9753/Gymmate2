@@ -19,6 +19,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.gymmate.AppViewModelProvider
+import com.example.gymmate.data.userdata.UserInstance
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -29,7 +30,6 @@ fun InitializeUserPage(
     modifier: Modifier = Modifier
 ) {
     val coroutineScope = rememberCoroutineScope()
-    val exerciseEntityState by remember { initializeUserPageViewModel.exerciseEntity?.collectAsState() }
 
     var loadingText by remember { mutableStateOf("") }
     var dotsCount by remember { mutableIntStateOf(0) }
@@ -62,8 +62,8 @@ fun InitializeUserPage(
 
     LaunchedEffect(Unit) {
         coroutineScope.launch {
-            delay(2000)
             initializeUserPageViewModel.initializeUserProfile()
+            delay(2000)
             navigateToHomePage()
         }
     }
