@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
@@ -17,12 +18,16 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Slider
+import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -38,14 +43,17 @@ import com.example.gymmate.AppViewModelProvider
 import com.example.gymmate.ui.theme.Typography
 import com.example.gymmatekotlin.BasicPieChart
 import kotlinx.coroutines.launch
+import okhttp3.OkHttpClient
+import okhttp3.Request
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CaloriesPage(
-    viewModel: CaloriesPageViewModel = viewModel(factory = AppViewModelProvider.Factory),
+    //viewModel: CaloriesPageViewModel = viewModel(factory = AppViewModelProvider.Factory),
     modifier: Modifier = Modifier
 ) {
     var openBottomSheet by rememberSaveable { mutableStateOf(false) }
+    var openWeightBottomSheet by rememberSaveable { mutableStateOf(false) }
     var skipPartiallyExpanded by remember { mutableStateOf(false) }
     var edgeToEdgeEnabled by remember { mutableStateOf(false) }
     val scope = rememberCoroutineScope()
@@ -72,7 +80,7 @@ fun CaloriesPage(
             }
             Spacer(modifier = Modifier.weight(1f))
             Button(onClick = {
-                openBottomSheet = !openBottomSheet
+                openWeightBottomSheet = !openWeightBottomSheet
             }) {
                 Text(text = "Add Weight")
             }
@@ -116,6 +124,66 @@ fun CaloriesPage(
                             )
                         }
                     )
+                }
+            }
+        }
+    }
+    if (openWeightBottomSheet) {
+        val windowInsets = if (edgeToEdgeEnabled)
+            WindowInsets(0) else BottomSheetDefaults.windowInsets
+
+        ModalBottomSheet(
+            onDismissRequest = { openWeightBottomSheet = false },
+            sheetState = bottomSheetState,
+            windowInsets = windowInsets
+        ) {
+            Row(
+                Modifier
+                    .fillMaxWidth()
+                    .fillMaxHeight(), horizontalArrangement = Arrangement.Center
+            ) {
+                var sliderPosition by remember { mutableIntStateOf(0) } // Change mutableIntStateOf to mutableStateOf
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally, // Center horizontally
+                    modifier = Modifier.fillMaxWidth() // Fill the maximum width
+                ) {
+                    Text(
+                        text = "Your weight is"
+                    )
+                    Slider(
+                        value = sliderPosition.toFloat(), // Cast sliderPosition to Float for Slider
+                        onValueChange = {
+                            sliderPosition = it.toInt()
+                        }, // Cast it to Int when updating sliderPosition
+                        colors = SliderDefaults.colors(
+                            thumbColor = MaterialTheme.colorScheme.secondary,
+                            activeTrackColor = MaterialTheme.colorScheme.secondary,
+                            inactiveTrackColor = MaterialTheme.colorScheme.secondaryContainer,
+                        ),
+                        valueRange = 0f..100f
+                    )
+                    Text(
+                        text = "$sliderPosition kg",
+                        textAlign = TextAlign.Center // Center the text horizontally
+                    )
+                    Row(
+                        horizontalArrangement = Arrangement.Center, // Center-align buttons horizontally
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Button(onClick = {
+                            scope.launch { bottomSheetState.hide() }.invokeOnCompletion {
+                                if (!bottomSheetState.isVisible) {
+                                    openWeightBottomSheet = false
+                                }
+                            }
+                        }) {
+                            Text(text = "Cancel")
+                        }
+                        Spacer(modifier = Modifier.width(16.dp)) // Add space between buttons
+                        Button(onClick = {}) {
+                            Text(text = "Confirm")
+                        }
+                    }
                 }
             }
         }
