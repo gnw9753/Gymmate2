@@ -30,28 +30,35 @@ import androidx.lifecycle.ViewModel
 import com.example.gymmate.questionpage.QuestionPageViewModel
 import com.example.gymmate.ui.theme.Typography
 
+// Define a Composable function for the Day Page
 @Composable
 fun DayPage(viewModel: QuestionPageViewModel, modifier: Modifier = Modifier) {
+    // Declare a mutable state variable to track if there is an error
     var isError by rememberSaveable { mutableStateOf(false) }
 
-    fun validate(){
+    // Function to validate user input
+    fun validate() {
         isError = viewModel.amountSelected <= 1
     }
 
+    // Create a column layout
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .padding(top = 5.dp)
     ) {
+        // Create a row for displaying instructions and a reset button
         Row(
             modifier = Modifier
                 .fillMaxWidth()
         ) {
+            // Display a text message based on whether there is an error
             Text(
-                text = if(isError)"Select days available\nAt minimum 2 days" else "Select days available",
+                text = if (isError) "Select days available\nAt minimum 2 days" else "Select days available",
                 style = Typography.labelLarge,
                 textAlign = TextAlign.Left
             )
+            // Create a TextButton with an icon to reset selections
             Spacer(modifier = Modifier.weight(1f))
             TextButton(
                 onClick = {
@@ -64,13 +71,14 @@ fun DayPage(viewModel: QuestionPageViewModel, modifier: Modifier = Modifier) {
                     viewModel.saturday = false
                     viewModel.sunday = false
                 },
-            ){
-            Icon(
-                imageVector = Icons.Default.RestartAlt,
-                contentDescription = "Reset"
-            )
+            ) {
+                Icon(
+                    imageVector = Icons.Default.RestartAlt,
+                    contentDescription = "Reset"
+                )
             }
         }
+        // Create buttons for each day of the week using ButtonCreate function
         ButtonCreate("Monday", viewModel)
         ButtonCreate("Tuesday", viewModel)
         ButtonCreate("Wednesday", viewModel)
@@ -79,6 +87,7 @@ fun DayPage(viewModel: QuestionPageViewModel, modifier: Modifier = Modifier) {
         ButtonCreate("Saturday", viewModel)
         ButtonCreate("Sunday", viewModel)
 
+        // Create a TextButton for proceeding to the next page
         TextButton(
             onClick = {
                 validate()
@@ -88,15 +97,17 @@ fun DayPage(viewModel: QuestionPageViewModel, modifier: Modifier = Modifier) {
                 .align(Alignment.CenterHorizontally)
         ) {
             Text("Next")
-
         }
     }
 }
 
+// Composable function to create a button for each day
 @Composable
 fun ButtonCreate(day: String, viewModel: QuestionPageViewModel, modifier: Modifier = Modifier) {
+    // Create a Button with an onClick listener
     Button(
         onClick = {
+            // Toggle the selected state of the day and update the count of selected days
             when (day) {
                 "Monday" -> viewModel.monday = !viewModel.monday
                 "Tuesday" -> viewModel.tuesday = !viewModel.tuesday
@@ -108,6 +119,7 @@ fun ButtonCreate(day: String, viewModel: QuestionPageViewModel, modifier: Modifi
             }
             viewModel.amountSelected++
         },
+        // Enable or disable the button based on the selected state
         enabled = when (day) {
             "Monday" -> !viewModel.monday
             "Tuesday" -> !viewModel.tuesday
@@ -121,7 +133,7 @@ fun ButtonCreate(day: String, viewModel: QuestionPageViewModel, modifier: Modifi
         shape = RoundedCornerShape(10.dp),
         modifier = Modifier.padding(top = 5.dp, start = 5.dp, end = 5.dp)
     ) {
+        // Display the day text on the button
         Text(day)
     }
 }
-

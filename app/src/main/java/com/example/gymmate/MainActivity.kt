@@ -23,7 +23,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             Theme(darkTheme = false) {
-                CaloriesPage()
+                Homepage()
             }
         }
     }
