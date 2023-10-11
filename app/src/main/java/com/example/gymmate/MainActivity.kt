@@ -1,35 +1,29 @@
+@file:OptIn(ExperimentalMaterial3Api::class)
+
 package com.example.gymmate
 
 import android.os.Bundle
-import com.google.android.material.bottomnavigation.BottomNavigationView
-import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.findNavController
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.setupActionBarWithNavController
-import androidx.navigation.ui.setupWithNavController
-import com.example.gymmate.databinding.ActivityMainBinding
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.compose.material3.ExperimentalMaterial3Api
+import com.example.gymmate.caloriespage.CaloriesPage
+import com.example.gymmate.data.GenerateWorkout
+import com.example.gymmate.data.ReadExerciseCSV
+import com.example.gymmate.data.exercisedata.ExerciseDay
+import com.example.gymmate.data.userdata.User
+import com.example.gymmate.questionpage.QuestionPage
+import com.example.gymmate.summarypage.SummaryPage
+import com.example.gymmate.ui.theme.Theme
 
-class MainActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityMainBinding
+class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-
-        val navView: BottomNavigationView = binding.navView
-
-        val navController = findNavController(R.id.nav_host_fragment_activity_main)
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
-        val appBarConfiguration = AppBarConfiguration(
-            setOf(
-                R.id.navigation_home, R.id.navigation_cals, R.id.navigation_funs
-            )
-        )
-        setupActionBarWithNavController(navController, appBarConfiguration)
-        navView.setupWithNavController(navController)
+        setContent {
+            Theme(darkTheme = false) {
+                GymmateApp()
+            }
+        }
     }
 }
