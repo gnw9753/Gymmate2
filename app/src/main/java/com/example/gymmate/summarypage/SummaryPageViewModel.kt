@@ -3,7 +3,6 @@ package com.example.gymmate.summarypage
 import android.content.ContentValues
 import android.content.Context
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
@@ -23,7 +22,10 @@ import androidx.core.graphics.createBitmap
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.gymmate.R
+import com.example.gymmate.data.CSVReader
 import com.example.gymmate.data.GenerateWorkout
+import com.example.gymmate.data.dailytrack.DailyTrack
+import com.example.gymmate.data.dailytrack.DailyTrackRepository
 import com.example.gymmate.data.exercisedata.Exercise
 import com.example.gymmate.data.exercisedata.ExerciseRepository
 import com.example.gymmate.data.userdata.UserEntityRepository
@@ -36,10 +38,16 @@ import java.io.OutputStream
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 
+data class Recipe (
+    var recipe: String = "",
+    var calories: Int = 0
+)
+
 @RequiresApi(Build.VERSION_CODES.O)
 class SummaryPageViewModel(
     val exerciseRepository: ExerciseRepository,
-    val userEntityRepository: UserEntityRepository
+    val userEntityRepository: UserEntityRepository,
+    val dailyTrackRepository: DailyTrackRepository
 ) : ViewModel() {
     val workouts = arrayOf("yoga", "Pilates", "Push-up", "Sit-up", "Aerobics", "Rope skipping")
     var workoutItemSelected by mutableStateOf(workouts[0])
@@ -56,7 +64,6 @@ class SummaryPageViewModel(
     var email by mutableStateOf(currentUser!!.email)
     var weight by mutableFloatStateOf(currentUser!!.weight)
     var height by mutableFloatStateOf(currentUser!!.height)
-
 
     fun addExercise() {
         val currentUser = UserInstance.currentUser
@@ -203,5 +210,29 @@ class SummaryPageViewModel(
             }
         }
         return false
+    }
+
+    private fun getRandomRecipe(context: Context): Recipe {
+        val inputStream = context.resources.openRawResource(R.raw.recipes)
+        val csvReader = CSVReader(inputStream)
+        val list = csvReader.read()
+        // randomly choose a row
+        val rowIndex = (0..list.size-1).random()
+        val row = list[rowIndex]
+        val recipe = row[1]
+        val calories = row[2].trim().toInt()
+        return Recipe(recipe, calories)
+    }
+
+    suspend fun getTodayRecipe(context: Context): DailyTrack {
+        var track = dailyTrackRepository.getTodayTrack()
+        if (track == null) {
+            val recipe = getRandomRecipe(context)
+            dailyTrackRepository.insertDailyTrack(weight, recipe)
+            val dailyAllTracks = dailyTrackRepository.getDailyAllTracks()
+            Log.i("SummaryPageViewModel", "getTodayRecipe: $dailyAllTracks")
+            track = dailyTrackRepository.getTodayTrack()
+        }
+        return track!!
     }
 }

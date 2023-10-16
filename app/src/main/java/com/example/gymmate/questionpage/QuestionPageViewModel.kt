@@ -9,7 +9,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.gymmate.R
 import com.example.gymmate.data.GenerateWorkout
-import com.example.gymmate.data.ReadExerciseCSV
+import com.example.gymmate.data.CSVReader
 import com.example.gymmate.data.exercisedata.ExerciseDay
 import com.example.gymmate.data.exercisedata.ExerciseRepository
 import com.example.gymmate.data.userdata.User
@@ -128,7 +128,7 @@ class QuestionPageViewModel(
 
     fun createWorkout(id: Int, context: Context): List<ExerciseDay> {
         val inputStream = context.resources.openRawResource(R.raw.resist_train_planner)
-        val csvFile = ReadExerciseCSV(inputStream)
+        val csvFile = CSVReader(inputStream)
         val exerciseCSV = csvFile.read()
         return GenerateWorkout(id, goal, dayToList(), exerciseCSV).generateWorkout()
     }

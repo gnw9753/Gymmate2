@@ -8,7 +8,8 @@ data class DailyTrack (
     @PrimaryKey(autoGenerate = true)
     var id: Int = 0,
 
-    var date: String = "",
+    var timestamp: Long = 0L,
     var weight: Float = 0f,
     var calories: Int = 0,
+    val recipe: String = "",
 )
