@@ -51,6 +51,7 @@ android {
 }
 
 dependencies {
+    testImplementation("junit:junit:4.12")
     val room_version = "2.5.2"
 
     implementation("com.pierfrancescosoffritti.androidyoutubeplayer:chromecast-sender:0.28")

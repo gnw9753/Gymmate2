@@ -219,75 +219,11 @@ fun PieCardText(
     val gender = "Male"
     val age = 60
     val goal = "Gain Muscle"
-    if (gender != null && age != null && goal != null) {
 
-        var calorieValue = 0;
-        if (gender == "Male") {
-            if (age <= 14) {
-                if (goal == "Gain Muscle") {
-                    calorieValue = (2500 * 1.1).toInt()
-                } else if (goal == "Lose Weight") {
-                    calorieValue = (2500 - 500)
-                }
-            } else if (age <= 18) {
-                if (goal == "Gain Muscle") {
-                    calorieValue = (3000 * 1.1).toInt()
-                } else if (goal == "Lose Weight") {
-                    calorieValue = (3000 - 500)
-                }
-            } else if (age <= 24) {
-                if (goal == "Gain Muscle") {
-                    calorieValue = (2900 * 1.1).toInt()
-                } else if (goal == "Lose Weight") {
-                    calorieValue = (2900 - 500)
-                }
-            } else if (age <= 50) {
-                if (goal == "Gain Muscle") {
-                    calorieValue = 2900 * 1.1.toInt()
-                } else if (goal == "Lose Weight") {
-                    calorieValue = (2900 - 500)
-                }
-            } else if (age >= 51) {
-                if (goal == "Gain Muscle") {
-                    calorieValue = 3000 * 1.1.toInt()
-                } else if (goal == "Lose Weight") {
-                    calorieValue = (3000 - 500)
-                }
-            }
-        } else {
-            if (age <= 14) {
-                if (goal == "Gain Muscle") {
-                    calorieValue = 2200 * 1.1.toInt()
-                } else if (goal == "Lose Weight") {
-                    calorieValue = (2200 - 500)
-                }
-            } else if (age <= 18) {
-                if (goal == "Gain Muscle") {
-                    calorieValue = 2200 * 1.1.toInt()
-                } else if (goal == "Lose Weight") {
-                    calorieValue = (2200 - 500)
-                }
-            } else if (age <= 24) {
-                if (goal == "Gain Muscle") {
-                    calorieValue = 2200 * 1.1.toInt()
-                } else if (goal == "Lose Weight") {
-                    calorieValue = (2200 - 500)
-                }
-            } else if (age <= 50) {
-                if (goal == "Gain Muscle") {
-                    calorieValue = 2200 * 1.1.toInt()
-                } else if (goal == "Lose Weight") {
-                    calorieValue = (2200 - 500)
-                }
-            } else if (age >= 51) {
-                if (goal == "Gain Muscle") {
-                    calorieValue = 1900 * 1.1.toInt()
-                } else if (goal == "Lose Weight") {
-                    calorieValue = (1900 - 500)
-                }
+    // Calculate calorie value using the new function
+    val calorieValue = calculateCalorieValue(gender, age, goal)
 
-            }
-        }
+    if (calorieValue > 0) {
         Column(
             modifier = Modifier
                 .padding(5.dp)
@@ -330,11 +266,44 @@ fun PieCardText(
                     ).toString() + " ~ " + calculateValue(calorieValue, 35, 9).toString() + "g Fat",
                     typography = Typography.bodyMedium
                 )
-
             }
         }
     }
 }
+
+// Define a separate function to calculate the calorie value
+fun calculateCalorieValue(gender: String, age: Int, goal: String): Int {
+    var calorieValue = 0
+
+    if (gender == "Male") {
+        if (age <= 14) {
+            calorieValue = if (goal == "Gain Muscle") (2500 * 1.1).toInt() else (2500 - 500)
+        } else if (age <= 18) {
+            calorieValue = if (goal == "Gain Muscle") (3000 * 1.1).toInt() else (3000 - 500)
+        } else if (age <= 24) {
+            calorieValue = if (goal == "Gain Muscle") (2900 * 1.1).toInt() else (2900 - 500)
+        } else if (age <= 50) {
+            calorieValue = if (goal == "Gain Muscle") (2900 * 1.1).toInt() else (2900 - 500)
+        } else if (age >= 51) {
+            calorieValue = if (goal == "Gain Muscle") (3000 * 1.1).toInt() else (3000 - 500)
+        }
+    } else {
+        if (age <= 14) {
+            calorieValue = if (goal == "Gain Muscle") (2200 * 1.1).toInt() else (2200 - 500)
+        } else if (age <= 18) {
+            calorieValue = if (goal == "Gain Muscle") (2200 * 1.1).toInt() else (2200 - 500)
+        } else if (age <= 24) {
+            calorieValue = if (goal == "Gain Muscle") (2200 * 1.1).toInt() else (2200 - 500)
+        } else if (age <= 50) {
+            calorieValue = if (goal == "Gain Muscle") (2200 * 1.1).toInt() else (2200 - 500)
+        } else if (age >= 51) {
+            calorieValue = if (goal == "Gain Muscle") (1900 * 1.1).toInt() else (1900 - 500)
+        }
+    }
+
+    return calorieValue
+}
+
 /////////////////////
 // End of Pie card //
 /////////////////////
