@@ -11,6 +11,9 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.gymmate.ui.theme.carbs
+import com.example.gymmate.ui.theme.fat
+import com.example.gymmate.ui.theme.protein
 
 data class PieChartEntry(val color: Color, val percentage: Float)
 
@@ -46,9 +49,9 @@ fun PieChart(entries: List<PieChartEntry>) {
 @Composable
 fun BasicPieChart() {
     val entries = listOf(
-        PieChartEntry(Color.Red, 0.3f),
-        PieChartEntry(Color.Green, 0.4f),
-        PieChartEntry(Color.Blue, 0.3f)
+        PieChartEntry(protein, 0.3f),
+        PieChartEntry(carbs, 0.4f),
+        PieChartEntry(fat, 0.3f)
     )
     PieChart(entries)
 }
