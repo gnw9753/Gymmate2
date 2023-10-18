@@ -15,7 +15,7 @@ data class User (
     var user_weight: Float,
     var user_goal: String,
     var user_days: List<Boolean>,
-    var exercise_schedule: List<ExerciseDay>,
+    var exercise_schedule: List<ExerciseDay>?,
     var isInitialized: Boolean
     ){
 }

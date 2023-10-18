@@ -17,7 +17,7 @@ class LoginPageViewModel(
 ) : ViewModel() {
 
     var isError by mutableStateOf(false) // Initialize isError here
-    var emailEntered by mutableStateOf("")
+    var emailEntered by mutableStateOf("test@test.com")
     var emailFound by mutableStateOf(false)
 
     suspend fun checkEmailInDatabase() :Boolean{

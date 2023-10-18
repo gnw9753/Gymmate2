@@ -33,7 +33,6 @@ fun GymmateNavigationBar(
                 },
                 label = { Text(text = gymmateDestination.route)}
 
-
             )
 
         }

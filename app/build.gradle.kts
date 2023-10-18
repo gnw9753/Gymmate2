@@ -10,7 +10,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.gymmate"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -69,6 +69,7 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2")
     implementation("androidx.compose.material:material-icons-extended")
     implementation("androidx.navigation:navigation-compose:2.7.2")
+    implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
 
     // Room/Database
     implementation("androidx.room:room-runtime:2.5.2")

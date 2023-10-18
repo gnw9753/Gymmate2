@@ -13,10 +13,8 @@ import com.example.gymmate.caloriespage.CaloriesPage
 import com.example.gymmate.homepage.Homepage
 import com.example.gymmate.login.InitializeUserPage
 import com.example.gymmate.login.LoginPage
-import com.example.gymmate.questionpage.questions.EmailPage
-import com.example.gymmate.questionpage.questions.NamePage
 import com.example.gymmate.questionpage.QuestionPage
-import com.google.android.material.bottomappbar.BottomAppBar
+import com.example.gymmate.summarypage.SummaryPage
 
 
 @Composable
@@ -67,6 +65,9 @@ private fun GymmateNavHost(
         }
         composable(route = GymmateRoute.CALORIES) {
             CaloriesPage(navigationActions)
+        }
+        composable(route = GymmateRoute.SUMMARY) {
+            SummaryPage(navigationActions)
         }
     }
 }

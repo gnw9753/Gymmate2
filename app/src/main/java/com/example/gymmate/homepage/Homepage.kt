@@ -1,5 +1,6 @@
 package com.example.gymmate.homepage
 
+import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
@@ -33,6 +34,7 @@ fun Homepage(
            .weight(1f)
        ) {
            items(exerciseDayList ?: emptyList()) { exercise ->
+               Log.d("exercise",exercise.day)
                DateCardRow(
                    day = exercise.day,
                    exerciseDay = exercise,
