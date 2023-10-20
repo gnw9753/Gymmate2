@@ -31,6 +31,7 @@ import com.example.gymmate.AppViewModelProvider
 import com.example.gymmate.GymmateNavigationBar
 import com.example.gymmate.GymmateRoute
 import com.example.gymmate.NavigationActions
+import com.example.gymmate.data.userdata.UserInstance.currentUser
 import com.patrykandpatrick.vico.compose.axis.horizontal.rememberBottomAxis
 import com.patrykandpatrick.vico.compose.axis.vertical.rememberStartAxis
 import com.patrykandpatrick.vico.compose.chart.Chart
@@ -39,7 +40,10 @@ import com.patrykandpatrick.vico.core.axis.AxisItemPlacer
 import com.patrykandpatrick.vico.core.chart.line.LineChart
 import com.patrykandpatrick.vico.core.entry.ChartEntryModelProducer
 import com.patrykandpatrick.vico.core.entry.FloatEntry
+import com.vanpra.composematerialdialogs.rememberMaterialDialogState
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 
 @RequiresApi(Build.VERSION_CODES.Q)
@@ -49,12 +53,20 @@ fun SummaryPage(
     navigationActions: NavigationActions,
     viewModel: SummaryPageViewModel = viewModel(factory = AppViewModelProvider.Factory),
 ) {
+    val context = LocalContext.current
+    LaunchedEffect(key1 = currentUser?.id) {
+        viewModel.viewModelScope.launch {
+            viewModel.getTodayRecipe(context = context)
+        }
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceBetween
     ) {
+
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -88,8 +100,12 @@ fun SummaryPage(
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun WeightGraphCard(modifier: Modifier = Modifier) {
+fun WeightGraphCard(
+    modifier: Modifier = Modifier,
+    viewModel: SummaryPageViewModel = viewModel(factory = AppViewModelProvider.Factory)
+) {
     Card(
         modifier = modifier
             .fillMaxSize()
@@ -100,22 +116,27 @@ fun WeightGraphCard(modifier: Modifier = Modifier) {
         val datasetLineSpec = remember { arrayListOf<LineChart.LineSpec>() }
 
         LaunchedEffect(key1 = refreshDataset.intValue) {
-            // TODO rebuild dataset
-            datasetForModel.clear()
-            datasetLineSpec.clear()
-            var xPos = 0f
-            val dataPoints = arrayListOf<FloatEntry>()
-            datasetLineSpec.add(
-                LineChart.LineSpec(
-                    lineColor = Color.BLUE,
+            viewModel.viewModelScope.launch {
+                // TODO rebuild dataset
+                datasetForModel.clear()
+                datasetLineSpec.clear()
+                var xPos = 0f
+                val dataPoints = arrayListOf<FloatEntry>()
+                datasetLineSpec.add(
+                    LineChart.LineSpec(
+                        lineColor = Color.BLUE,
+                    )
                 )
-            )
-            for (i in 0..50) {
-                dataPoints.add(FloatEntry(xPos, (65..70).random().toFloat()))
-                xPos += 1f
+
+                val allDailyTracks = viewModel.getAllDailyTracks()
+                for (dailyTrack in allDailyTracks) {
+                    dataPoints.add(FloatEntry(xPos, dailyTrack.weight))
+                    xPos += 1f
+                }
+
+                datasetForModel.add(dataPoints)
+                modelProducer.setEntries(datasetForModel)
             }
-            datasetForModel.add(dataPoints)
-            modelProducer.setEntries(datasetForModel)
         }
 
         Column(
@@ -153,8 +174,12 @@ fun WeightGraphCard(modifier: Modifier = Modifier) {
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun CaloriesGraphCard(modifier: Modifier = Modifier) {
+fun CaloriesGraphCard(
+    modifier: Modifier = Modifier,
+    viewModel: SummaryPageViewModel = viewModel(factory = AppViewModelProvider.Factory)
+) {
     Card(
         modifier = modifier
             .fillMaxWidth()
@@ -165,23 +190,28 @@ fun CaloriesGraphCard(modifier: Modifier = Modifier) {
         val datasetForModel = remember { mutableListOf(listOf<FloatEntry>()) }
         val datasetLineSpec = remember { arrayListOf<LineChart.LineSpec>() }
 
-        LaunchedEffect(key1 = refreshDataset.intValue) {
-            // TODO rebuild dataset
-            datasetForModel.clear()
-            datasetLineSpec.clear()
-            var xPos = 0f
-            val dataPoints = arrayListOf<FloatEntry>()
-            datasetLineSpec.add(
-                LineChart.LineSpec(
-                    lineColor = Color.BLUE,
+        LaunchedEffect(key1 = "") {
+            viewModel.viewModelScope.launch {
+                // TODO rebuild dataset
+                datasetForModel.clear()
+                datasetLineSpec.clear()
+                var xPos = 0f
+                val dataPoints = arrayListOf<FloatEntry>()
+                datasetLineSpec.add(
+                    LineChart.LineSpec(
+                        lineColor = Color.BLUE,
+                    )
                 )
-            )
-            for (i in 0..50) {
-                dataPoints.add(FloatEntry(xPos, (1000..3000).random().toFloat()))
-                xPos += 1f
+
+                val allDailyTracks = viewModel.getAllDailyTracks()
+                for (dailyTrack in allDailyTracks) {
+                    dataPoints.add(FloatEntry(xPos, dailyTrack.calories.toFloat()))
+                    xPos += 1f
+                }
+
+                datasetForModel.add(dataPoints)
+                modelProducer.setEntries(datasetForModel)
             }
-            datasetForModel.add(dataPoints)
-            modelProducer.setEntries(datasetForModel)
         }
 
         Column(
@@ -222,20 +252,9 @@ fun BottomButton(
     viewModel: SummaryPageViewModel = viewModel(factory = AppViewModelProvider.Factory),
 ) {
     val context = LocalContext.current
-    var recipe by remember {
-        mutableStateOf("None")
-    }
-    var calories by remember {
-        mutableIntStateOf(0)
-    }
 
-    LaunchedEffect(key1 = "") {
-        viewModel.viewModelScope.launch {
-            val track = viewModel.getTodayRecipe(context)
-            recipe = track.recipe
-            calories = track.calories
-        }
-    }
+    val state = rememberMaterialDialogState()
+    RecipeScreen(state = state)
 
     Column(
         modifier = modifier
@@ -292,34 +311,23 @@ fun BottomButton(
             }
         }
 
-
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .weight(2f),
+                .weight(1f),
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center,
+            Button(
+                modifier = Modifier.weight(1f),
+                onClick = {
+                    state.show()
+                }
             ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                ) {
-                    Text(text = "Recommend recipes today: ")
-                }
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .verticalScroll(rememberScrollState())
-                ){
-                    Text("${recipe}: $calories cal")
-                }
+                Text("Show Today Recipe")
             }
         }
     }
 }
+
+

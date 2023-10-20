@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -20,4 +21,7 @@ interface DailyTrackDao {
 
     @Query("SELECT * FROM daily_track WHERE id = :id")
     fun getDailyTrackById(id: Int): Flow<List<DailyTrack>>
+
+    @Update
+    suspend fun update(dailyTrack: DailyTrack)
 }

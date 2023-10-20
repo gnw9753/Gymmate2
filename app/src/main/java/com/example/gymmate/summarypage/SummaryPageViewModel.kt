@@ -109,6 +109,11 @@ class SummaryPageViewModel(
                 currentUser.weight = weight
                 currentUser.height = height
             }
+            viewModelScope.launch {
+                val dt = dailyTrackRepository.getTodayTrack()!!
+                dt.weight = weight
+                dailyTrackRepository.update(dt)
+            }
             return true
 
         } else {
@@ -123,45 +128,64 @@ class SummaryPageViewModel(
             val user = userEntityRepository.getUserByEmail(currentUser!!.email).firstOrNull()!!
             val list = exerciseRepository.getAllExerciseById(user.id).firstOrNull()!!
 
-            // calculate the size of the bitmap
-            val width = 1500
-            val height = (list.size + 1) * 70 * 3 + 100
-
-            val bitmap = createBitmap(width, height)
-
-            // paint the background
-            val canvas = Canvas(bitmap)
-            val paint = Paint()
-            paint.color = Color.WHITE
-            canvas.drawRect(0f, 0f, width.toFloat(), height.toFloat(), paint)
-
-            paint.color = Color.BLACK
-            paint.textSize = 75f
-            var index = 0
-            for (i in list.indices) {
-                canvas.drawText(list[i].day, 100f, (100 + index++ * 70).toFloat(), paint)
-                canvas.drawText(list[i].exerciseName, 100f, (100 + index++ * 70).toFloat(), paint)
-                canvas.drawText(list[i].muscleGroup, 100f, (100 + index++ * 70).toFloat(), paint)
-                canvas.save()
-            }
-            canvas.drawText("weight", 100f, (100 + index++ * 70).toFloat(), paint)
-            canvas.drawText(
-                user.weight.toString() + "kg",
-                100f,
-                (100 + index * 70).toFloat(),
-                paint
-            )
-            try {
-                if (saveQUp(bitmap, context, "0920.jpg", 80)) {
-                    Toast.makeText(context, "save image ok", Toast.LENGTH_SHORT).show()
-                } else {
-                    Toast.makeText(context, "save image fail", Toast.LENGTH_SHORT).show()
-                }
-
-            } catch (ex: Exception) {
-                ex.printStackTrace()
+            if (saveExerciseImage(context, list, user.weight,
+                    "${user.name}_exercises.jpg")) {
+                Toast.makeText(context, "save image ok", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(context, "save image fail", Toast.LENGTH_SHORT).show()
             }
         }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.Q)
+    fun saveExerciseImage(
+        context: Context,
+        list: List<Exercise>,
+        weight: Float,
+        filename: String = "exercises.jpg"
+    ): Boolean {
+        // calculate the size of the bitmap
+        val width = 1500
+        val height = (list.size + 1) * 70 * 3 + 100
+
+        val bitmap = createBitmap(width, height)
+
+        // paint the background
+        val canvas = Canvas(bitmap)
+        val paint = Paint()
+        paint.color = Color.WHITE
+        canvas.drawRect(0f, 0f, width.toFloat(), height.toFloat(), paint)
+
+        paint.color = Color.BLACK
+        paint.textSize = 75f
+
+        val xPos = 100f
+        var yPos = 100f
+        for (exercise in list) {
+            canvas.drawText(exercise.day, xPos, yPos, paint)
+            yPos += 70
+            canvas.drawText(exercise.exerciseName, xPos, yPos, paint)
+            yPos += 70
+            canvas.drawText(exercise.muscleGroup, xPos, yPos, paint)
+            yPos += 70
+        }
+
+        canvas.drawText("weight", xPos, yPos, paint)
+
+        yPos += 70
+        canvas.drawText(
+            weight.toString() + "kg",
+            xPos, yPos,
+            paint
+        )
+
+        try {
+            return saveQUp(bitmap, context, filename, 80)
+        } catch (ex: Exception) {
+            ex.printStackTrace()
+        }
+
+        return false
     }
 
     @RequiresApi(api = Build.VERSION_CODES.Q)
@@ -234,5 +258,9 @@ class SummaryPageViewModel(
             track = dailyTrackRepository.getTodayTrack()
         }
         return track!!
+    }
+
+    suspend fun getAllDailyTracks(): List<DailyTrack> {
+        return dailyTrackRepository.getDailyAllTracks()
     }
 }
