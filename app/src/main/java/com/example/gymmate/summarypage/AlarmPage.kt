@@ -7,6 +7,7 @@ import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -53,18 +54,45 @@ fun AlarmScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        Button(onClick = {
-            timeDialogState.show()
-        }) {
-            Text(text = "Pick a time")
+        Row(
+            modifier = Modifier
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceEvenly,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
+                Button(onClick = {
+                    timeDialogState.show()
+                }) {
+                    Text(text = "Pick a time")
+                }
+                Text(text = "Selected time: ${viewModel.formattedTime}")
+                DropdownMenuWorkout()
+            }
         }
-        Text(text = "Selected time: ${viewModel.formattedTime}")
-        DropdownMenuWorkout()
-        Spacer(modifier = Modifier.height(16.dp))
-        Button(onClick = {
-            setAlarm(viewModel, context)
-        }) {
-            Text(text = "Confirm")
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceEvenly,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Button(onClick = {
+                setAlarm(viewModel, context)
+            }) {
+                Text(text = "Confirm")
+            }
+
+            Button(onClick = {
+                navigationActions.navController.popBackStack()
+            }) {
+                Text(text = "Cancel")
+            }
         }
     }
     MaterialDialog(

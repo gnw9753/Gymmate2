@@ -92,6 +92,9 @@ dependencies {
     // For the view system.
     implementation("com.patrykandpatrick.vico:views:1.12.0")
 
+    // For csv reading
+    implementation("com.github.doyaaaaaken:kotlin-csv-jvm:1.9.2") // for JVM platform
+
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")

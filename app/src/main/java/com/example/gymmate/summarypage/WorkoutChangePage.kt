@@ -39,11 +39,13 @@ import com.vanpra.composematerialdialogs.rememberMaterialDialogState
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun WorkoutChangeButton(
+    modifier: Modifier,
     viewModel: SummaryPageViewModel = viewModel(factory = AppViewModelProvider.Factory),
 ) {
     val context = LocalContext.current
     val workoutState = rememberMaterialDialogState()
     Button(
+        modifier = modifier,
         onClick = {
             workoutState.show()
         }

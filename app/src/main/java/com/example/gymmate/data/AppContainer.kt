@@ -1,6 +1,7 @@
 package com.example.gymmate.data
 
 import android.content.Context
+import com.example.gymmate.data.dailytrack.OfflineDailyTrackRepository
 import com.example.gymmate.data.exercisedata.ExerciseRepository
 import com.example.gymmate.data.exercisedata.OfflineExerciseRepository
 import com.example.gymmate.data.userdata.OfflineUserEntityRepository
@@ -9,6 +10,7 @@ import com.example.gymmate.data.userdata.UserEntityRepository
 interface AppContainer {
     val exerciseRepository: ExerciseRepository
     val userEntityRepository: UserEntityRepository
+    val dailyTrackRepository: OfflineDailyTrackRepository
 }
 
 class AppDataContainer(private val context: Context): AppContainer{
@@ -20,4 +22,7 @@ class AppDataContainer(private val context: Context): AppContainer{
         OfflineUserEntityRepository(GymmateEmbeddedDatabase.getDatabase(context).userEntityDao())
     }
 
+    override val dailyTrackRepository: OfflineDailyTrackRepository by lazy {
+        OfflineDailyTrackRepository(GymmateEmbeddedDatabase.getDatabase(context).dailyTrackDao())
+    }
 }

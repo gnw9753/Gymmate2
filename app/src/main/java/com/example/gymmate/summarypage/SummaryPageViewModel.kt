@@ -3,7 +3,6 @@ package com.example.gymmate.summarypage
 import android.content.ContentValues
 import android.content.Context
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
@@ -23,7 +22,10 @@ import androidx.core.graphics.createBitmap
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.gymmate.R
+import com.example.gymmate.data.CSVReader
 import com.example.gymmate.data.GenerateWorkout
+import com.example.gymmate.data.dailytrack.DailyTrack
+import com.example.gymmate.data.dailytrack.DailyTrackRepository
 import com.example.gymmate.data.exercisedata.Exercise
 import com.example.gymmate.data.exercisedata.ExerciseRepository
 import com.example.gymmate.data.userdata.UserEntityRepository
@@ -36,10 +38,16 @@ import java.io.OutputStream
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 
+data class Recipe (
+    var recipe: String = "",
+    var calories: Int = 0
+)
+
 @RequiresApi(Build.VERSION_CODES.O)
 class SummaryPageViewModel(
     val exerciseRepository: ExerciseRepository,
-    val userEntityRepository: UserEntityRepository
+    val userEntityRepository: UserEntityRepository,
+    val dailyTrackRepository: DailyTrackRepository
 ) : ViewModel() {
     val workouts = arrayOf("yoga", "Pilates", "Push-up", "Sit-up", "Aerobics", "Rope skipping")
     var workoutItemSelected by mutableStateOf(workouts[0])
@@ -56,7 +64,6 @@ class SummaryPageViewModel(
     var email by mutableStateOf(currentUser!!.email)
     var weight by mutableFloatStateOf(currentUser!!.weight)
     var height by mutableFloatStateOf(currentUser!!.height)
-
 
     fun addExercise() {
         val currentUser = UserInstance.currentUser
@@ -102,6 +109,11 @@ class SummaryPageViewModel(
                 currentUser.weight = weight
                 currentUser.height = height
             }
+            viewModelScope.launch {
+                val dt = dailyTrackRepository.getTodayTrack()!!
+                dt.weight = weight
+                dailyTrackRepository.update(dt)
+            }
             return true
 
         } else {
@@ -116,45 +128,64 @@ class SummaryPageViewModel(
             val user = userEntityRepository.getUserByEmail(currentUser!!.email).firstOrNull()!!
             val list = exerciseRepository.getAllExerciseById(user.id).firstOrNull()!!
 
-            // calculate the size of the bitmap
-            val width = 1500
-            val height = (list.size + 1) * 70 * 3 + 100
-
-            val bitmap = createBitmap(width, height)
-
-            // paint the background
-            val canvas = Canvas(bitmap)
-            val paint = Paint()
-            paint.color = Color.WHITE
-            canvas.drawRect(0f, 0f, width.toFloat(), height.toFloat(), paint)
-
-            paint.color = Color.BLACK
-            paint.textSize = 75f
-            var index = 0
-            for (i in list.indices) {
-                canvas.drawText(list[i].day, 100f, (100 + index++ * 70).toFloat(), paint)
-                canvas.drawText(list[i].exerciseName, 100f, (100 + index++ * 70).toFloat(), paint)
-                canvas.drawText(list[i].muscleGroup, 100f, (100 + index++ * 70).toFloat(), paint)
-                canvas.save()
-            }
-            canvas.drawText("weight", 100f, (100 + index++ * 70).toFloat(), paint)
-            canvas.drawText(
-                user.weight.toString() + "kg",
-                100f,
-                (100 + index * 70).toFloat(),
-                paint
-            )
-            try {
-                if (saveQUp(bitmap, context, "0920.jpg", 80)) {
-                    Toast.makeText(context, "save image ok", Toast.LENGTH_SHORT).show()
-                } else {
-                    Toast.makeText(context, "save image fail", Toast.LENGTH_SHORT).show()
-                }
-
-            } catch (ex: Exception) {
-                ex.printStackTrace()
+            if (saveExerciseImage(context, list, user.weight,
+                    "${user.name}_exercises.jpg")) {
+                Toast.makeText(context, "save image ok", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(context, "save image fail", Toast.LENGTH_SHORT).show()
             }
         }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.Q)
+    fun saveExerciseImage(
+        context: Context,
+        list: List<Exercise>,
+        weight: Float,
+        filename: String = "exercises.jpg"
+    ): Boolean {
+        // calculate the size of the bitmap
+        val width = 1500
+        val height = (list.size + 1) * 70 * 3 + 100
+
+        val bitmap = createBitmap(width, height)
+
+        // paint the background
+        val canvas = Canvas(bitmap)
+        val paint = Paint()
+        paint.color = Color.WHITE
+        canvas.drawRect(0f, 0f, width.toFloat(), height.toFloat(), paint)
+
+        paint.color = Color.BLACK
+        paint.textSize = 75f
+
+        val xPos = 100f
+        var yPos = 100f
+        for (exercise in list) {
+            canvas.drawText(exercise.day, xPos, yPos, paint)
+            yPos += 70
+            canvas.drawText(exercise.exerciseName, xPos, yPos, paint)
+            yPos += 70
+            canvas.drawText(exercise.muscleGroup, xPos, yPos, paint)
+            yPos += 70
+        }
+
+        canvas.drawText("weight", xPos, yPos, paint)
+
+        yPos += 70
+        canvas.drawText(
+            weight.toString() + "kg",
+            xPos, yPos,
+            paint
+        )
+
+        try {
+            return saveQUp(bitmap, context, filename, 80)
+        } catch (ex: Exception) {
+            ex.printStackTrace()
+        }
+
+        return false
     }
 
     @RequiresApi(api = Build.VERSION_CODES.Q)
@@ -203,5 +234,33 @@ class SummaryPageViewModel(
             }
         }
         return false
+    }
+
+    private fun getRandomRecipe(context: Context): Recipe {
+        val inputStream = context.resources.openRawResource(R.raw.recipes)
+        val csvReader = CSVReader(inputStream)
+        val list = csvReader.read()
+        // randomly choose a row
+        val rowIndex = (0..list.size-1).random()
+        val row = list[rowIndex]
+        val recipe = row[1]
+        val calories = row[2].trim().toInt()
+        return Recipe(recipe, calories)
+    }
+
+    suspend fun getTodayRecipe(context: Context): DailyTrack {
+        var track = dailyTrackRepository.getTodayTrack()
+        if (track == null) {
+            val recipe = getRandomRecipe(context)
+            dailyTrackRepository.insertDailyTrack(weight, recipe)
+            val dailyAllTracks = dailyTrackRepository.getDailyAllTracks()
+            Log.i("SummaryPageViewModel", "getTodayRecipe: $dailyAllTracks")
+            track = dailyTrackRepository.getTodayTrack()
+        }
+        return track!!
+    }
+
+    suspend fun getAllDailyTracks(): List<DailyTrack> {
+        return dailyTrackRepository.getDailyAllTracks()
     }
 }

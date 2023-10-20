@@ -21,7 +21,7 @@ import com.example.gymmate.summarypage.ChangeUserInfoScreen
 import com.example.gymmate.summarypage.SummaryPage
 
 
-@RequiresApi(Build.VERSION_CODES.O)
+@RequiresApi(Build.VERSION_CODES.Q)
 @Composable
 fun GymmateApp(modifier: Modifier = Modifier) {
     val navController = rememberNavController()
@@ -40,7 +40,7 @@ fun GymmateApp(modifier: Modifier = Modifier) {
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
+@RequiresApi(Build.VERSION_CODES.Q)
 @Composable
 private fun GymmateNavHost(
     navController: NavHostController,
@@ -73,7 +73,7 @@ private fun GymmateNavHost(
             CaloriesPage(navigationActions)
         }
         composable(route = GymmateRoute.SUMMARY) {
-            SummaryPage(navigationActions)
+            SummaryPage(navigationActions = navigationActions)
         }
         composable(route = GymmateRoute.ALARM_PAGE) {
             AlarmScreen(navigationActions)
