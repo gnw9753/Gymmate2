@@ -5,7 +5,6 @@ import android.util.Log
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import androidx.test.platform.app.InstrumentationRegistry
 import com.example.gymmate.data.exercisedata.Exercise
 import com.example.gymmate.fake_repository.FakeDailyTrackRepository
 import com.example.gymmate.fake_repository.FakeExerciseRepository
@@ -27,7 +26,7 @@ import java.time.format.DateTimeFormatter
  */
 
 @RunWith(AndroidJUnit4::class)
-class ExampleInstrumentedTest {
+class DownloadImageTest {
     @get:Rule
     val composeTestRule = createComposeRule()
     @Test
