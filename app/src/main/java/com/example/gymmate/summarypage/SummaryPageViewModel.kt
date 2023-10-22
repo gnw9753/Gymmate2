@@ -146,7 +146,7 @@ class SummaryPageViewModel(
     ): Boolean {
         // calculate the size of the bitmap
         val width = 1500
-        val height = (list.size + 1) * 70 * 3 + 100
+        val height = (list.size + 1) * 70 * 4 + 100
 
         val bitmap = createBitmap(width, height)
 
@@ -167,6 +167,8 @@ class SummaryPageViewModel(
             canvas.drawText(exercise.exerciseName, xPos, yPos, paint)
             yPos += 70
             canvas.drawText(exercise.muscleGroup, xPos, yPos, paint)
+            yPos += 70
+            canvas.drawText("-----------------------------------------", xPos, yPos, paint)
             yPos += 70
         }
 

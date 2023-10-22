@@ -16,4 +16,8 @@ class FakeDailyTrackRepository: DailyTrackRepository {
     override suspend fun getTodayTrack(): DailyTrack? {
         TODO("Not yet implemented")
     }
+
+    override suspend fun update(dailyTrack: DailyTrack) {
+        TODO("Not yet implemented")
+    }
 }
