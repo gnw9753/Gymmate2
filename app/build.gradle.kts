@@ -69,7 +69,6 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2")
     implementation("androidx.compose.material:material-icons-extended")
     implementation("androidx.navigation:navigation-compose:2.7.2")
-    implementation("io.github.vanpra.compose-material-dialogs:datetime:0.9.0")
 
     // Room/Database
     implementation("androidx.room:room-runtime:2.5.2")
@@ -77,23 +76,23 @@ dependencies {
     ksp("androidx.room:room-compiler:2.5.2")
     implementation("androidx.room:room-ktx:2.5.2")
 
+    // Sung Dependencies
     implementation("com.github.blackfizz:eazegraph:1.2.5l@aar")
     implementation("com.nineoldandroids:library:2.4.0")
-    
-    // graphs
-    // For Jetpack Compose.
-    implementation("com.patrykandpatrick.vico:compose:1.12.0")
-    // For `compose`. Creates a `ChartStyle` based on an M2 Material Theme.
-    implementation("com.patrykandpatrick.vico:compose-m2:1.12.0")
-    // For `compose`. Creates a `ChartStyle` based on an M3 Material Theme.
-    implementation("com.patrykandpatrick.vico:compose-m3:1.12.0")
-    // Houses the core logic for charts and other elements. Included in all other modules.
-    implementation("com.patrykandpatrick.vico:core:1.12.0")
-    // For the view system.
-    implementation("com.patrykandpatrick.vico:views:1.12.0")
+    implementation("com.pierfrancescosoffritti.androidyoutubeplayer:chromecast-sender:0.28")
+    implementation("androidx.compose.material3:material3")
+    implementation("androidx.compose.material3:material3-window-size-class:1.1.2")
+    implementation("com.squareup.okhttp3:okhttp:4.10.0")
 
-    // For csv reading
-    implementation("com.github.doyaaaaaken:kotlin-csv-jvm:1.9.2") // for JVM platform
+    // Datastore implementation
+    implementation("androidx.datastore:datastore:1.0.0")
+    implementation("com.google.protobuf:protobuf-javalite:3.24.4")
+    implementation("com.google.protobuf:protobuf-kotlin-lite:3.24.4")
+
+    // Test rules and transitive dependencies:
+    androidTestImplementation("androidx.compose.ui:ui-test-junit4:1.4.7")
+// Needed for createAndroidComposeRule, but not createComposeRule:
+    debugImplementation("androidx.compose.ui:ui-test-manifest:1.4.7")
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")

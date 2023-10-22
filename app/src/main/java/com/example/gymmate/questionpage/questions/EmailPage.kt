@@ -28,6 +28,7 @@ fun EmailPage(
         val emailRegex = Regex("^[A-Za-z](.*)([@]{1})(.{1,})(\\.)(.{1,})")
         isError = !text.matches(emailRegex)
     }
+
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
