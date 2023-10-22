@@ -10,27 +10,22 @@ import androidx.lifecycle.viewModelScope
 import com.example.gymmate.R
 import com.example.gymmate.data.GenerateWorkout
 import com.example.gymmate.data.ReadExerciseCSV
-import com.example.gymmate.data.exercisedata.Exercise
 import com.example.gymmate.data.exercisedata.ExerciseDay
 import com.example.gymmate.data.exercisedata.ExerciseRepository
 import com.example.gymmate.data.logindata.LoginEntity
 import com.example.gymmate.data.logindata.LoginEntityRepository
-import com.example.gymmate.data.logindata.OfflineLoginEntityRepository
 import com.example.gymmate.data.userdata.User
 import com.example.gymmate.data.userdata.UserEntity
 import com.example.gymmate.data.userdata.UserEntityRepository
 import com.example.gymmate.data.userdata.UserInstance
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
-import java.util.Locale
 import java.util.TimeZone
 
 class QuestionPageViewModel(
@@ -210,15 +205,15 @@ suspend fun createUserProfile(context: Context) {
     }
 
     UserInstance.currentUser = User(
-        user_id = 0,
-        user_email = email,
-        user_name = "",
-        user_gender = "",
-        user_age = 0,
-        user_height = 0f,
-        user_weight = 0f,
-        user_goal = "",
-        user_days = emptyList(),
+        id = 0,
+        email = email,
+        name = "",
+        gender = "",
+        age = 0,
+        height = 0f,
+        weight = 0f,
+        goal = "",
+        days = emptyList(),
         exercise_schedule = emptyList(),
         isInitialized = false
     )

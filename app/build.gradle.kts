@@ -75,6 +75,7 @@ dependencies {
     implementation("androidx.core:core-ktx:1.12.0")
     ksp("androidx.room:room-compiler:2.5.2")
     implementation("androidx.room:room-ktx:2.5.2")
+    implementation("io.github.vanpra.compose-material-dialogs:datetime:0.9.0")
 
     // Sung Dependencies
     implementation("com.github.blackfizz:eazegraph:1.2.5l@aar")
@@ -89,10 +90,26 @@ dependencies {
     implementation("com.google.protobuf:protobuf-javalite:3.24.4")
     implementation("com.google.protobuf:protobuf-kotlin-lite:3.24.4")
 
+
+    // graphs
+    // For Jetpack Compose.
+    implementation("com.patrykandpatrick.vico:compose:1.12.0")
+    // For `compose`. Creates a `ChartStyle` based on an M2 Material Theme.
+    implementation("com.patrykandpatrick.vico:compose-m2:1.12.0")
+    // For `compose`. Creates a `ChartStyle` based on an M3 Material Theme.
+    implementation("com.patrykandpatrick.vico:compose-m3:1.12.0")
+    // Houses the core logic for charts and other elements. Included in all other modules.
+    implementation("com.patrykandpatrick.vico:core:1.12.0")
+    // For the view system.
+    implementation("com.patrykandpatrick.vico:views:1.12.0")
+
     // Test rules and transitive dependencies:
     androidTestImplementation("androidx.compose.ui:ui-test-junit4:1.4.7")
 // Needed for createAndroidComposeRule, but not createComposeRule:
     debugImplementation("androidx.compose.ui:ui-test-manifest:1.4.7")
+
+    // For csv reading
+    implementation("com.github.doyaaaaaken:kotlin-csv-jvm:1.9.2") // for JVM platform
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")

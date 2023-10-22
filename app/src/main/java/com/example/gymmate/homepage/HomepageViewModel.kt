@@ -58,7 +58,7 @@ class HomepageViewModel(
     private fun getUserEmail(): String {
         var userEmail: String = ""
         if(UserInstance.currentUser != null) {
-            userEmail = UserInstance.currentUser!!.user_email
+            userEmail = UserInstance.currentUser!!.email
         }
         println("User email is :$userEmail")
         return userEmail
