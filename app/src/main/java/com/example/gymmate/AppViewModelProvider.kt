@@ -1,5 +1,7 @@
 package com.example.gymmate
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.CreationExtras
 import androidx.lifecycle.viewmodel.initializer
@@ -15,6 +17,7 @@ import com.example.gymmate.summarypage.SummaryPageViewModel
 
 
 object AppViewModelProvider {
+    @RequiresApi(Build.VERSION_CODES.O)
     val Factory = viewModelFactory {
         initializer {
             LoginPageViewModel(gymmateApplication().container.userEntityRepository)
@@ -47,7 +50,8 @@ object AppViewModelProvider {
         initializer {
             SummaryPageViewModel(
                 gymmateApplication().container.exerciseRepository,
-                gymmateApplication().container.userEntityRepository
+                gymmateApplication().container.userEntityRepository,
+                gymmateApplication().container.dailyTrackRepository
             )
         }
     }

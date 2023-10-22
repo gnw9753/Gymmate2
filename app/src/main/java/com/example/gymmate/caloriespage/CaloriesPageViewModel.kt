@@ -19,7 +19,6 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.launch
 
 class CaloriesPageViewModel(
     private val foodConsumptionRepository: FoodConsumptionRepository,
@@ -175,31 +174,31 @@ class CaloriesPageViewModel(
     private fun getEmail(): String {
         var email: String = ""
         if (UserInstance.currentUser != null) {
-            email = UserInstance.currentUser!!.user_email
+            email = UserInstance.currentUser!!.email
         }
         return email
     }
 
     fun getGender(): String {
         var gender = "Male"
-        if (UserInstance.currentUser != null && UserInstance.currentUser!!.user_gender != "") {
-            gender = UserInstance.currentUser!!.user_gender
+        if (UserInstance.currentUser != null && UserInstance.currentUser!!.gender != "") {
+            gender = UserInstance.currentUser!!.gender
         }
         return gender
     }
 
     fun getAge(): Int {
         var age = 60
-        if (UserInstance.currentUser != null && UserInstance.currentUser!!.user_age > 0) {
-            age = UserInstance.currentUser!!.user_age
+        if (UserInstance.currentUser != null && UserInstance.currentUser!!.age > 0) {
+            age = UserInstance.currentUser!!.age
         }
         return age
     }
 
     fun getGoal(): String {
         var goal = "Gain Muscle"
-        if (UserInstance.currentUser != null && UserInstance.currentUser!!.user_goal != "") {
-            goal = UserInstance.currentUser!!.user_goal
+        if (UserInstance.currentUser != null && UserInstance.currentUser!!.goal != "") {
+            goal = UserInstance.currentUser!!.goal
         }
         return goal
     }

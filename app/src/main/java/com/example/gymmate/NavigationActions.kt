@@ -16,10 +16,12 @@ enum class GymmateApp() {
     QuestionPage,
     SummaryPage,
     AddFoodPage,
-    ChangeWorkoutPage, ;
+    ChangeWorkoutPage,
+    AlarmPage,
 }
 
 object GymmateRoute {
+    const val CHANGE_USER_INFO = "ChangeUserInfo"
     const val HOME = "Home"
     const val QUESTION = "Question"
     const val SUMMARY = "Summary"
@@ -27,6 +29,7 @@ object GymmateRoute {
     const val CHANGEWORKOUT = "ChangeWorkout"
     const val LOGIN = "Login"
     const val INITIALIZEUSER = "InitializeUser"
+    const val ALARM_PAGE = "AlarmPage"
     const val ADDFOOD = "AddFood"
 }
 
@@ -37,7 +40,7 @@ data class GymmateTopLevelDestination(
     val iconTextId: Int
 )
 
-class NavigationActions(private val navController: NavHostController) {
+class NavigationActions(val navController: NavHostController) {
     fun navigateTo(destination: GymmateTopLevelDestination) {
         navController.navigate(destination.route) {
             popUpTo(navController.graph.findStartDestination().id) {
