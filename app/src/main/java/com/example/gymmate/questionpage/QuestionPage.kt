@@ -58,6 +58,7 @@ import com.example.gymmate.ui.theme.Typography
 fun QuestionPage(
     viewModel: QuestionPageViewModel = viewModel(factory = AppViewModelProvider.Factory),
     navigateToHomePage: () -> Unit,
+    navigateBack: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val questionPageUiState by viewModel.uiState.collectAsState()
@@ -78,6 +79,10 @@ fun QuestionPage(
             TextButton(
                 onClick = {
                     viewModel.decreasePageIndex()
+                    if(viewModel.goBackToLogin) {
+                        viewModel.goBackToLogin = false
+                        navigateBack()
+                    }
                 },
                 modifier = Modifier
                     .align(Alignment.Start)

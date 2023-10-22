@@ -59,7 +59,10 @@ private fun GymmateNavHost(
                 navigateToInitializeUser = { navController.navigate(GymmateRoute.INITIALIZEUSER) })
         }
         composable(route = GymmateRoute.QUESTION) {
-            QuestionPage(navigateToHomePage = { navController.navigate(GymmateRoute.INITIALIZEUSER) })
+            QuestionPage(
+                navigateToHomePage = { navController.navigate(GymmateRoute.INITIALIZEUSER) },
+                navigateBack = { navController.navigate(GymmateRoute.LOGIN) }
+            )
         }
         composable(route = GymmateRoute.INITIALIZEUSER) {
             InitializeUserPage(navigateToHomePage = { navController.navigate(GymmateRoute.HOME) })
@@ -68,7 +71,7 @@ private fun GymmateNavHost(
             Homepage(navigationActions)
         }
         composable(route = GymmateRoute.CALORIES) {
-            CaloriesPage()
+            CaloriesPage(navigationActions)
         }
         composable(route = GymmateRoute.SUMMARY) {
             SummaryPage(navigationActions)

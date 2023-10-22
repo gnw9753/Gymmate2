@@ -21,12 +21,16 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.gymmate.AppViewModelProvider
+import com.example.gymmate.GymmateNavigationBar
+import com.example.gymmate.GymmateRoute
+import com.example.gymmate.NavigationActions
 import com.example.gymmate.ui.theme.Typography
 import com.example.gymmate.ui.theme.calories
 import com.example.gymmate.ui.theme.noCalories
 
 @Composable
 fun CaloriesPage(
+    navigationActions: NavigationActions,
     viewModel: CaloriesPageViewModel = viewModel(factory = AppViewModelProvider.Factory),
     modifier: Modifier = Modifier
 ) {
@@ -62,11 +66,10 @@ fun CaloriesPage(
             }
 
         }
-        /*
         GymmateNavigationBar(
             selectedDestination = GymmateRoute.CALORIES,
             navigateToTopLevelDestination = navigationActions::navigateTo
-        )*/
+        )
     }
 }
 
