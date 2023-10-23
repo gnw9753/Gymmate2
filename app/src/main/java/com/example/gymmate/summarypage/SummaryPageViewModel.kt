@@ -60,6 +60,9 @@ class SummaryPageViewModel(
 
     var workoutDateSelected by mutableStateOf(GenerateWorkout.dayString[0])
 
+    var openThemeSheet by mutableStateOf(false)
+    var openCalendarSheet by mutableStateOf(false)
+
     var name by mutableStateOf(currentUser!!.name)
     var email by mutableStateOf(currentUser!!.email)
     var weight by mutableFloatStateOf(currentUser!!.weight)
@@ -146,7 +149,7 @@ class SummaryPageViewModel(
     ): Boolean {
         // calculate the size of the bitmap
         val width = 1500
-        val height = (list.size + 1) * 70 * 4 + 100
+        val height = (list.size + 1) * 70 * 3 + 100
 
         val bitmap = createBitmap(width, height)
 
@@ -167,8 +170,6 @@ class SummaryPageViewModel(
             canvas.drawText(exercise.exerciseName, xPos, yPos, paint)
             yPos += 70
             canvas.drawText(exercise.muscleGroup, xPos, yPos, paint)
-            yPos += 70
-            canvas.drawText("-----------------------------------------", xPos, yPos, paint)
             yPos += 70
         }
 

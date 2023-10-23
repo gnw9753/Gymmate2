@@ -9,7 +9,10 @@ import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
@@ -49,7 +52,6 @@ private val LightColors = lightColorScheme(
     scrim = md_theme_light_scrim,
 )
 
-
 private val DarkColors = darkColorScheme(
     primary = md_theme_dark_primary,
     onPrimary = md_theme_dark_onPrimary,
@@ -82,6 +84,31 @@ private val DarkColors = darkColorScheme(
     scrim = md_theme_dark_scrim,
 )
 
+// Red theme
+private val RedThemeColors = lightColorScheme(
+    primary = Color(0xFFFF4040),
+    background = Color(0x66FF4040),
+    surface = Color(0x33FF4040),
+    surfaceVariant = Color(0x11FF4040)
+)
+
+// Yellow theme
+private val YellowThemeColors = lightColorScheme(
+    primary = Color(0xFFDAA520),
+    background = Color(0x66FFD700),
+    surface = Color(0x33FFD700),
+    surfaceVariant = Color(0x11FFD700)
+)
+
+// Blue theme
+private val BlueThemeColors = lightColorScheme(
+    primary = Color(0xFF436EEE),
+    background = Color(0x6600FFFF),
+    surface = Color(0x3300FFFF),
+    surfaceVariant = Color(0x1100FFFF)
+)
+
+var appThemeName: MutableState<String?> = mutableStateOf("")
 
 @Composable
 fun Theme(
@@ -97,17 +124,25 @@ fun Theme(
         darkTheme -> DarkColors
         else -> LightColors
     }
+
+    val colors = when (appThemeName.value) {
+        "red" -> RedThemeColors
+        "yellow" -> YellowThemeColors
+        "blue" -> BlueThemeColors
+        else -> if (darkTheme) DarkColors else LightColors
+    }
+
     val view = LocalView.current
     if (!view.isInEditMode) {
         SideEffect {
             val window = (view.context as Activity).window
-            window.statusBarColor = ColorScheme.primary.toArgb()
-            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = darkTheme
+            window.statusBarColor = colors.primary.toArgb()
+            WindowCompat.getInsetsController(window, view)?.isAppearanceLightStatusBars = darkTheme
         }
     }
 
     MaterialTheme(
-        colorScheme = ColorScheme,
+        colorScheme = colors,
         typography = Typography,
         shapes = shapes,
         content = content
