@@ -61,6 +61,9 @@ class SummaryPageViewModel(
 
     var workoutDateSelected by mutableStateOf(GenerateWorkout.dayString[0])
 
+    var openThemeSheet by mutableStateOf(false)
+    var openCalendarSheet by mutableStateOf(false)
+
     var name by mutableStateOf(currentUser!!.name)
     var email by mutableStateOf(currentUser!!.email)
     var weight by mutableFloatStateOf(currentUser!!.weight)
@@ -182,13 +185,17 @@ class SummaryPageViewModel(
         }
         paint.getTextBounds(maxSizeText, 0, maxSizeText.length, bounds)
 
-        for (entry in mapDayExercise) {
-            val day = entry.key
+        for (day in GenerateWorkout.dayString) {
+            if (!mapDayExercise.containsKey(day)) {
+                continue
+            }
+
             canvas.drawText(day, xPos, yPos, paint)
-            paint.getTextBounds(day, 0, entry.key.length, bounds)
+            paint.getTextBounds(day, 0, day.length, bounds)
             yPos += bounds.height() + 10
 
-            for (exercise in entry.value) {
+            val exerciseList = mapDayExercise[day]!!
+            for (exercise in exerciseList) {
                 val exerciseText = "${exercise.muscleGroup}: ${exercise.exerciseName}"
                 canvas.drawText(exerciseText, xPos, yPos, paint)
                 paint.getTextBounds(exerciseText, 0, exerciseText.length, bounds)
