@@ -36,7 +36,7 @@ class CalendarDataSource {
         dateList: List<LocalDate>,
         lastSelectedDate: LocalDate
     ): CalendarUiModel {
-        var exerciseDayList= UserInstance.currentUser?.exercise_schedule
+        var exerciseDayList= UserInstance.currentUser?.exerciseSchedule
 
         //combine
         return CalendarUiModel(

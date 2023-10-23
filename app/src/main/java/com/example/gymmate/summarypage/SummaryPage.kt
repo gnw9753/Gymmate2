@@ -1,101 +1,393 @@
 package com.example.gymmate.summarypage
 
-
+import android.graphics.Color
 import android.os.Build
-import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectable
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ChevronLeft
 import androidx.compose.material.icons.filled.ChevronRight
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.BottomSheetDefaults
+import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.gymmate.AppViewModelProvider
 import com.example.gymmate.GymmateNavigationBar
 import com.example.gymmate.GymmateRoute
 import com.example.gymmate.NavigationActions
 import com.example.gymmate.R
-import com.example.gymmate.data.userdata.UserInstance
+import com.example.gymmate.data.userdata.UserInstance.currentUser
 import com.example.gymmate.ui.theme.appThemeName
+import com.patrykandpatrick.vico.compose.axis.horizontal.rememberBottomAxis
+import com.patrykandpatrick.vico.compose.axis.vertical.rememberStartAxis
+import com.patrykandpatrick.vico.compose.chart.Chart
+import com.patrykandpatrick.vico.compose.style.ProvideChartStyle
+import com.patrykandpatrick.vico.core.axis.AxisItemPlacer
+import com.patrykandpatrick.vico.core.chart.line.LineChart
+import com.patrykandpatrick.vico.core.entry.ChartEntryModelProducer
+import com.patrykandpatrick.vico.core.entry.FloatEntry
+import com.vanpra.composematerialdialogs.rememberMaterialDialogState
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 
 
+@RequiresApi(Build.VERSION_CODES.Q)
 @Composable
 fun SummaryPage(
+    modifier: Modifier = Modifier,
     navigationActions: NavigationActions,
     viewModel: SummaryPageViewModel = viewModel(factory = AppViewModelProvider.Factory),
-    modifier: Modifier = Modifier
 ) {
+    val context = LocalContext.current
+    LaunchedEffect(key1 = currentUser?.id) {
+        viewModel.viewModelScope.launch {
+            viewModel.getTodayRecipe(context = context)
+        }
+    }
 
-    var exerciseDayList = UserInstance.currentUser?.exercise_schedule
-    Log.d("Summary", exerciseDayList?.size.toString());
     Column(
         modifier = Modifier
-            .fillMaxSize()
+            .fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.SpaceBetween
     ) {
-        // Top horizontal slider // Carousel
-        // Logic to decide to display homepage or exercise video page
+
         Column(
-            modifier = modifier
-                .weight(1f)
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(1f),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.SpaceBetween,
         ) {
-
-            Card(
+            Spacer(modifier = Modifier.weight(.1f))
+            WeightGraphCard(
                 modifier = Modifier
-                    .padding(5.dp)
-                    .fillMaxWidth()
-            ) {
-                Row(
-                    modifier = Modifier
-                        .padding(5.dp)
-                ) {
-                    CalendarApp()
-                }
-
-            }
-
-            Row(
-                horizontalArrangement = Arrangement.Center,
+                    .weight(1f)
+            )
+            Spacer(modifier = Modifier.weight(.1f))
+            CaloriesGraphCard(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(5.dp)
-            ) {
-                Button(onClick = {
-                    viewModel.openThemeSheet = !viewModel.openThemeSheet
-                }) {
-                    Text(text = "Change Theme")
-                }
-                Spacer(modifier = Modifier.weight(1f))
-                Button(onClick = {
-                    viewModel.openStaticsSheet = !viewModel.openStaticsSheet
-                }) {
-                    Text(text = "Weight Statistics")
-                }
-            }
+                    .weight(1f)
+            )
+            Spacer(modifier = Modifier.weight(.1f))
+            BottomButton(
+                navigationActions = navigationActions,
+                modifier = Modifier
+                    .weight(1f)
+            )
+            Spacer(modifier = Modifier.weight(.1f))
             BottomSheetTheme(viewModel)
-            BottomSheetStatics(viewModel)
-
+            BottomSheetCalendar(viewModel)
         }
+
         GymmateNavigationBar(
             selectedDestination = GymmateRoute.SUMMARY,
             navigateToTopLevelDestination = navigationActions::navigateTo
         )
+    }
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
+@Composable
+fun WeightGraphCard(
+    modifier: Modifier = Modifier,
+    viewModel: SummaryPageViewModel = viewModel(factory = AppViewModelProvider.Factory)
+) {
+    Card(
+        modifier = modifier
+            .fillMaxSize()
+    ) {
+        val refreshDataset = remember { mutableIntStateOf(0) }
+        val modelProducer = remember { ChartEntryModelProducer() }
+        val datasetForModel = remember { mutableListOf(listOf<FloatEntry>()) }
+        val datasetLineSpec = remember { arrayListOf<LineChart.LineSpec>() }
+
+        LaunchedEffect(key1 = refreshDataset.intValue) {
+            viewModel.viewModelScope.launch {
+                // TODO rebuild dataset
+                datasetForModel.clear()
+                datasetLineSpec.clear()
+                var xPos = 0f
+                val dataPoints = arrayListOf<FloatEntry>()
+                datasetLineSpec.add(
+                    LineChart.LineSpec(
+                        lineColor = Color.BLUE,
+                    )
+                )
+
+                val allDailyTracks = viewModel.getAllDailyTracks()
+                for (dailyTrack in allDailyTracks) {
+                    dataPoints.add(FloatEntry(xPos, dailyTrack.weight))
+                    xPos += 1f
+                }
+
+                datasetForModel.add(dataPoints)
+                modelProducer.setEntries(datasetForModel)
+            }
+        }
+
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            if (datasetForModel.isNotEmpty()) {
+                ProvideChartStyle {
+                    Chart(
+                        modifier = Modifier.fillMaxSize(),
+                        chart = LineChart(
+                            lines = datasetLineSpec
+                        ),
+                        chartModelProducer = modelProducer,
+
+                        startAxis = rememberStartAxis(
+                            title = "Weight",
+                            valueFormatter = { value, _ -> "${value.toInt()}kg" },
+                            itemPlacer = AxisItemPlacer.Vertical.default(
+                                maxItemCount = 6
+                            )
+                        ),
+
+                        bottomAxis = rememberBottomAxis(
+                            title = "Date",
+                            valueFormatter = { value, _ -> "${value.toInt()}" }
+                        ),
+
+                        marker = rememberMarker()
+                    )
+                }
+            }
+        }
+    }
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
+@Composable
+fun CaloriesGraphCard(
+    modifier: Modifier = Modifier,
+    viewModel: SummaryPageViewModel = viewModel(factory = AppViewModelProvider.Factory)
+) {
+    Card(
+        modifier = modifier
+            .fillMaxWidth()
+            .fillMaxHeight()
+    ) {
+        val refreshDataset = remember { mutableIntStateOf(0) }
+        val modelProducer = remember { ChartEntryModelProducer() }
+        val datasetForModel = remember { mutableListOf(listOf<FloatEntry>()) }
+        val datasetLineSpec = remember { arrayListOf<LineChart.LineSpec>() }
+
+        LaunchedEffect(key1 = "") {
+            viewModel.viewModelScope.launch {
+                // TODO rebuild dataset
+                datasetForModel.clear()
+                datasetLineSpec.clear()
+                var xPos = 0f
+                val dataPoints = arrayListOf<FloatEntry>()
+                datasetLineSpec.add(
+                    LineChart.LineSpec(
+                        lineColor = Color.BLUE,
+                    )
+                )
+
+                val allDailyTracks = viewModel.getAllDailyTracks()
+                for (dailyTrack in allDailyTracks) {
+                    dataPoints.add(FloatEntry(xPos, dailyTrack.calories.toFloat()))
+                    xPos += 1f
+                }
+
+                datasetForModel.add(dataPoints)
+                modelProducer.setEntries(datasetForModel)
+            }
+        }
+
+        Column(
+            modifier = Modifier.fillMaxSize()
+        ) {
+            if (datasetForModel.isNotEmpty()) {
+                ProvideChartStyle {
+                    Chart(
+                        modifier = Modifier.fillMaxSize(),
+                        chart = LineChart(
+                            lines = datasetLineSpec
+                        ),
+                        chartModelProducer = modelProducer,
+
+                        startAxis = rememberStartAxis(
+                            title = "Calories",
+                            valueFormatter = { value, _ -> "${value.toInt()}cal" }
+                        ),
+
+                        bottomAxis = rememberBottomAxis(
+                            title = "Date",
+                            valueFormatter = { value, _ -> "${value.toInt()}" }
+                        ),
+
+                        marker = rememberMarker()
+                    )
+                }
+            }
+        }
+    }
+}
+
+@RequiresApi(Build.VERSION_CODES.Q)
+@Composable
+fun BottomButton(
+    modifier: Modifier = Modifier,
+    navigationActions: NavigationActions,
+    viewModel: SummaryPageViewModel = viewModel(factory = AppViewModelProvider.Factory),
+) {
+    val context = LocalContext.current
+
+    val state = rememberMaterialDialogState()
+    RecipeScreen(state = state)
+
+    Column(
+        modifier = modifier
+            .fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center,
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(1f),
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            WorkoutChangeButton(
+                Modifier
+                    .fillMaxWidth()
+                    .weight(1f)
+            )
+
+            Button(
+                modifier = Modifier.weight(1f),
+                onClick = {
+                    navigationActions.navController.navigate(GymmateRoute.ALARM_PAGE)
+                }
+            ) {
+                Text("Set alarm")
+            }
+        }
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(1f),
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Button(
+                modifier = Modifier.weight(1f),
+                onClick = {
+                    navigationActions.navController.navigate(GymmateRoute.CHANGE_USER_INFO)
+                }
+            ) {
+                Text("Change User Info")
+            }
+
+            Button(
+                modifier = Modifier.weight(1f),
+                onClick = {
+                    viewModel.setDownload(context)
+                }
+            ) {
+                Text("Download Workout")
+            }
+        }
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(1f),
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Button(
+                modifier = Modifier.weight(1f),
+                onClick = {
+                    state.show()
+                }
+            ) {
+                Text("Show Today Recipe")
+            }
+        }
+
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(1f),
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Button(
+                modifier = Modifier.weight(1f),
+                onClick = {
+                    viewModel.openCalendarSheet = !viewModel.openCalendarSheet
+                }
+            ) {
+                Text("Show Calendar")
+            }
+            Button(
+                modifier = Modifier.weight(1f),
+                onClick = {
+                    viewModel.openThemeSheet = !viewModel.openThemeSheet
+                }
+            ) {
+                Text("Change theme")
+            }
+        }
     }
 }
 
@@ -208,7 +500,7 @@ fun ContentItem(
             containerColor = if (date.hasExercise) {
                 colorResource(id = R.color.purple_200)
             } else {
-                Color.LightGray
+                androidx.compose.ui.graphics.Color.LightGray
             }
         ),
     ) {
@@ -251,8 +543,7 @@ fun BottomSheetTheme(
         skipPartiallyExpanded = false
     )
     if (viewModel.openThemeSheet) {
-        val windowInsets = if (viewModel.edgeToEdgeEnabled)
-            WindowInsets(0) else BottomSheetDefaults.windowInsets
+        val windowInsets =  BottomSheetDefaults.windowInsets
 
         var themeList = listOf<String>("red", "yellow", "blue")
         //var appTheme by remember { mutableStateOf(AppTheme.System) }
@@ -285,10 +576,10 @@ fun BottomSheetTheme(
                             .padding(10.dp)
                             .background(
                                 when (item) {
-                                    "red" -> Color.Red
-                                    "yellow" -> Color.Yellow
-                                    "blue" -> Color.Blue
-                                    else -> Color.Blue
+                                    "red" -> androidx.compose.ui.graphics.Color.Red
+                                    "yellow" -> androidx.compose.ui.graphics.Color.Yellow
+                                    "blue" -> androidx.compose.ui.graphics.Color.Blue
+                                    else -> androidx.compose.ui.graphics.Color.Blue
                                 }
                             )
                             .selectable(
@@ -302,7 +593,7 @@ fun BottomSheetTheme(
                         ,
                         contentAlignment =  Alignment.Center
                     ) {
-                        Text(text = item, color = Color.White, fontSize = 20.sp)
+                        Text(text = item, color = androidx.compose.ui.graphics.Color.White, fontSize = 20.sp)
                     }
                 }
             }
@@ -313,7 +604,7 @@ fun BottomSheetTheme(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BottomSheetStatics(
+fun BottomSheetCalendar(
     viewModel: SummaryPageViewModel,
     modifier: Modifier = Modifier
 ) {
@@ -321,13 +612,12 @@ fun BottomSheetStatics(
     val bottomSheetState = rememberModalBottomSheetState(
         skipPartiallyExpanded = false
     )
-    if (viewModel.openStaticsSheet) {
-        val windowInsets = if (viewModel.edgeToEdgeEnabled)
-            WindowInsets(0) else BottomSheetDefaults.windowInsets
+    if (viewModel.openCalendarSheet) {
+        val windowInsets =  BottomSheetDefaults.windowInsets
 
 
         ModalBottomSheet(
-            onDismissRequest = { viewModel.openStaticsSheet = false },
+            onDismissRequest = { viewModel.openCalendarSheet = false },
             sheetState = bottomSheetState,
             windowInsets = windowInsets
         ) {
@@ -335,12 +625,8 @@ fun BottomSheetStatics(
             Column(Modifier.fillMaxWidth(),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally){
-                Text(text = "weight statics")
-                //var list= listOf(100f,120f,130f)
-                BarChart(
-                    modifier = Modifier.padding(20.dp),
-                    values = barChartInputsPercent
-                )
+                Text(text = "Calandar")
+                CalendarApp()
             }
 
         }

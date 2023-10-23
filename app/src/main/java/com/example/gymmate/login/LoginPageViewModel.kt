@@ -1,7 +1,6 @@
 package com.example.gymmate.login
 
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
@@ -17,7 +16,7 @@ class LoginPageViewModel(
 ) : ViewModel() {
 
     var isError by mutableStateOf(false) // Initialize isError here
-    var emailEntered by mutableStateOf("test@test.com")
+    var emailEntered by mutableStateOf("")
     var emailFound by mutableStateOf(false)
 
     suspend fun checkEmailInDatabase() :Boolean{
@@ -29,16 +28,16 @@ class LoginPageViewModel(
             println(emailFound)
             if (user != null) {
                 UserInstance.currentUser = User(
-                    user_id = user.id,
-                    user_email = user.email,
-                    user_name = "",
-                    user_gender = "",
-                    user_age = 0,
-                    user_height = 0f,
-                    user_weight = 0f,
-                    user_goal = "",
-                    user_days = emptyList(),
-                    exercise_schedule = emptyList(),
+                    id = user.id,
+                    email = user.email,
+                    name = "",
+                    gender = "",
+                    age = 0,
+                    height = 0f,
+                    weight = 0f,
+                    goal = "",
+                    days = emptyList(),
+                    exerciseSchedule = emptyList(),
                     isInitialized = false
                 )
             }

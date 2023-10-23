@@ -14,16 +14,16 @@ class GymmateApplication : Application() {
         container = AppDataContainer(this)
 
         UserInstance.currentUser = User(
-            user_id = 0,
-            user_email = "",
-            user_name = "",
-            user_gender = "",
-            user_age = 0,
-            user_height = 0f,
-            user_weight = 0f,
-            user_goal = "",
-            user_days = emptyList(),
-            exercise_schedule = emptyList(),
+            id = 0,
+            email = "",
+            name = "",
+            gender = "",
+            age = 0,
+            height = 0f,
+            weight = 0f,
+            goal = "",
+            days = emptyList(),
+            exerciseSchedule = emptyList(),
             isInitialized = false
         )
     }

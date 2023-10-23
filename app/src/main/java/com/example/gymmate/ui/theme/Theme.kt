@@ -12,14 +12,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.gymmate.ThemeViewModel
 
 // Material 3 color schemes
 private val LightColors = lightColorScheme(
@@ -87,24 +84,29 @@ private val DarkColors = darkColorScheme(
     scrim = md_theme_dark_scrim,
 )
 
-//红色主题色值
+//red theme
 private val RedThemeColors = lightColorScheme(
     primary = Color(0xFFFF4040),
-    background = Color(0x66FF4040)
+    background = Color(0x66FF4040),
+     surface=Color(0x33FF4040),
+    surfaceVariant=Color(0x11FF4040)
 )
 
-//黄色主题色值
+//yellow theme
 private val YellowThemeColors = lightColorScheme(
     primary = Color(0xFFDAA520),
-    background = Color(0x66FFD700)
+    background = Color(0x66FFD700),
+    surface=Color(0x33FFD700),
+    surfaceVariant=Color(0x11FFD700)
 )
 
-//蓝色主题色值
+//blue theme
 private val BlueThemeColors = lightColorScheme(
     primary = Color(0xFF436EEE),
-    background = Color(0x6600FFFF)
+    background = Color(0x6600FFFF),
+    surface=Color(0x3300FFFF),
+    surfaceVariant=Color(0x1100FFFF)
 )
-
 
 var appThemeName : MutableState<String?> = mutableStateOf("")
 
@@ -114,7 +116,6 @@ fun Theme(
     dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {
-
     val ColorScheme = when {
         dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
             val context = LocalContext.current
@@ -123,7 +124,6 @@ fun Theme(
         darkTheme -> DarkColors
         else -> LightColors
     }
-
     val colors = when (appThemeName.value) {
         "red" -> RedThemeColors
         "yellow" -> YellowThemeColors

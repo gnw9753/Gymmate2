@@ -5,6 +5,4 @@
     <string name="summary">Summary</string>
     <string name="question">Question</string>
     <string name="home">Home</string>
-    <string name="show_less">Show Less</string>
-    <string name="show_more">Show More</string>
 </resources>

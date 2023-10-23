@@ -38,6 +38,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.compose.rememberNavController
 import com.example.gymmate.AppViewModelProvider
 import com.example.gymmate.GymmateNavigationBar
 import com.example.gymmate.GymmateRoute
@@ -324,4 +325,10 @@ fun DisplayText(displayText: String, typography: TextStyle, modifier: Modifier =
         style = typography,
         modifier = modifier
     )
+}
+
+@Preview(showBackground = true)
+@Composable
+fun CaloriesPagePreview() {
+    CaloriesPage(NavigationActions(rememberNavController()))
 }

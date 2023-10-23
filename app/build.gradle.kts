@@ -10,7 +10,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.gymmate"
-        minSdk = 26
+        minSdk = 29
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -69,7 +69,7 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2")
     implementation("androidx.compose.material:material-icons-extended")
     implementation("androidx.navigation:navigation-compose:2.7.2")
-    implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
+    implementation("io.github.vanpra.compose-material-dialogs:datetime:0.9.0")
 
     // Room/Database
     implementation("androidx.room:room-runtime:2.5.2")
@@ -79,6 +79,21 @@ dependencies {
 
     implementation("com.github.blackfizz:eazegraph:1.2.5l@aar")
     implementation("com.nineoldandroids:library:2.4.0")
+    
+    // graphs
+    // For Jetpack Compose.
+    implementation("com.patrykandpatrick.vico:compose:1.12.0")
+    // For `compose`. Creates a `ChartStyle` based on an M2 Material Theme.
+    implementation("com.patrykandpatrick.vico:compose-m2:1.12.0")
+    // For `compose`. Creates a `ChartStyle` based on an M3 Material Theme.
+    implementation("com.patrykandpatrick.vico:compose-m3:1.12.0")
+    // Houses the core logic for charts and other elements. Included in all other modules.
+    implementation("com.patrykandpatrick.vico:core:1.12.0")
+    // For the view system.
+    implementation("com.patrykandpatrick.vico:views:1.12.0")
+
+    // For csv reading
+    implementation("com.github.doyaaaaaken:kotlin-csv-jvm:1.9.2") // for JVM platform
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")

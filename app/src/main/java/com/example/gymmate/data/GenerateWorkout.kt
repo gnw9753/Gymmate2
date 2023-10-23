@@ -6,8 +6,10 @@ import com.example.gymmate.data.userdata.User
 
 class GenerateWorkout(var userId: Int, var goal: String, var daysAvailable: List<Boolean>, val exerciseList: List<List<String>>){
 
-    val dayString =
-        listOf("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday")
+    companion object {
+        val dayString =
+            listOf("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday")
+    }
 
     // List for all muscle groups
     val abdominalList: MutableList<Exercise> = mutableListOf()

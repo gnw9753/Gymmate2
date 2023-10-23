@@ -1,5 +1,6 @@
 package com.example.gymmate.homepage
 
+import android.util.Log
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring

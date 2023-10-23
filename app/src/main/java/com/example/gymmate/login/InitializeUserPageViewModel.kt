@@ -10,11 +10,7 @@ import com.example.gymmate.data.userdata.UserEntity
 import com.example.gymmate.data.userdata.UserEntityRepository
 import com.example.gymmate.data.userdata.UserInstance
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.firstOrNull
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 class InitializeUserPageViewModel(
@@ -31,7 +27,7 @@ class InitializeUserPageViewModel(
 
     private val userEntity: Flow<UserEntity>? = UserInstance.currentUser?.let {
         userEntityRepository.getUserByEmail(
-            it.user_email
+            it.email
         )
     }
 
@@ -85,16 +81,16 @@ class InitializeUserPageViewModel(
                 val tempDaysAvailableList = createDaysAvailableList(listOfExercise.firstOrNull()!!)
 
                 val user = User(
-                    user_id = userEntity.id,
-                    user_email = userEntity.email,
-                    user_name = userEntity.name,
-                    user_gender = userEntity.gender,
-                    user_age = userEntity.age,
-                    user_height = userEntity.height,
-                    user_weight = userEntity.weight,
-                    user_goal = userEntity.goal,
-                    user_days = tempDaysAvailableList,
-                    exercise_schedule = listOfExerciseDay,
+                    id = userEntity.id,
+                    email = userEntity.email,
+                    name = userEntity.name,
+                    gender = userEntity.gender,
+                    age = userEntity.age,
+                    height = userEntity.height,
+                    weight = userEntity.weight,
+                    goal = userEntity.goal,
+                    days = tempDaysAvailableList,
+                    exerciseSchedule = listOfExerciseDay,
                     isInitialized = true
                 )
                 UserInstance.currentUser = user

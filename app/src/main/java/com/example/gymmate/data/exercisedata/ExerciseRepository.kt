@@ -1,6 +1,5 @@
 package com.example.gymmate.data.exercisedata
 
-import com.example.gymmate.data.userdata.UserEntity
 import kotlinx.coroutines.flow.Flow
 
 interface ExerciseRepository {
