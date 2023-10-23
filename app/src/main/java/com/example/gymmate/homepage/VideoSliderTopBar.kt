@@ -45,7 +45,11 @@ fun VideoSliderTopbar(
     val exerciseList = listOf(
         ListItem("Push up", "SeCKUmcrWt0"),
         ListItem("Squat", "xqvCmoLULNY"),
-        // Add more items with different video IDs
+        ListItem("Leg press", "W1SD96lrudY"),
+        ListItem("Superman", "z6PJMT2y8GQ"),
+        ListItem("V-up", "iP2fjvG0g3w"),
+        ListItem("Hammer dumbbell row", "roCP6wCXPqo"),
+        ListItem("Leg curl", "oFxEDkppbSQ")
     )
     OutlinedCard() {
         VideoPlayer(items = exerciseList, modifier)
