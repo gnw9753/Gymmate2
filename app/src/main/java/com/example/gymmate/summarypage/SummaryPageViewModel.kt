@@ -6,6 +6,7 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
+import android.graphics.Rect
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
@@ -148,8 +149,8 @@ class SummaryPageViewModel(
         filename: String = "exercises.jpg"
     ): Boolean {
         // calculate the size of the bitmap
-        val width = 1500
-        val height = (list.size + 1) * 70 * 3 + 100
+        val width = 2500
+        val height = 5000
 
         val bitmap = createBitmap(width, height)
 
@@ -164,23 +165,62 @@ class SummaryPageViewModel(
 
         val xPos = 100f
         var yPos = 100f
+
+        val mapDayExercise = mutableMapOf<String, MutableList<Exercise>>()
         for (exercise in list) {
-            canvas.drawText(exercise.day, xPos, yPos, paint)
-            yPos += 70
-            canvas.drawText(exercise.exerciseName, xPos, yPos, paint)
-            yPos += 70
-            canvas.drawText(exercise.muscleGroup, xPos, yPos, paint)
-            yPos += 70
+            if (mapDayExercise.containsKey(exercise.day)) {
+                mapDayExercise[exercise.day]!!.add(exercise)
+            } else {
+                mapDayExercise[exercise.day] = mutableListOf(exercise)
+            }
         }
 
-        canvas.drawText("weight", xPos, yPos, paint)
+        val bounds = Rect()
+        var maxSizeText = ""
+        for (exercise in list) {
+            val exerciseText = "${exercise.muscleGroup}: ${exercise.exerciseName}"
+            if (exerciseText.length > maxSizeText.length) {
+                maxSizeText = exerciseText
+            }
+        }
+        paint.getTextBounds(maxSizeText, 0, maxSizeText.length, bounds)
 
-        yPos += 70
+        for (day in GenerateWorkout.dayString) {
+            if (!mapDayExercise.containsKey(day)) {
+                continue
+            }
+
+            canvas.drawText(day, xPos, yPos, paint)
+            paint.getTextBounds(day, 0, day.length, bounds)
+            yPos += bounds.height() + 10
+
+            val exerciseList = mapDayExercise[day]!!
+            for (exercise in exerciseList) {
+                val exerciseText = "${exercise.muscleGroup}: ${exercise.exerciseName}"
+                canvas.drawText(exerciseText, xPos, yPos, paint)
+                paint.getTextBounds(exerciseText, 0, exerciseText.length, bounds)
+                yPos += bounds.height() + 10
+            }
+
+            val split = "============================"
+            canvas.drawText(split, xPos, yPos, paint)
+            yPos += bounds.height() + 10
+        }
+
+        // draw the weight
+        canvas.drawText("weight", xPos, yPos, paint)
+        yPos += bounds.height() + 10
+
         canvas.drawText(
             weight.toString() + "kg",
             xPos, yPos,
             paint
         )
+
+        bitmap.height = yPos.toInt() + 70
+//        bitmap.width = bounds.width() + 20
+//        canvas.drawBitmap(bitmap, Rect(0, 0, bitmap.width, bitmap.height),
+//            Rect(0, 0, bounds.width() + 20,  yPos.toInt() + 70), paint)
 
         try {
             return saveQUp(bitmap, context, filename, 80)

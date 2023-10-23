@@ -391,6 +391,7 @@ fun BottomButton(
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun CalendarApp(
     modifier: Modifier = Modifier,
@@ -468,6 +469,7 @@ fun Header(
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun Content(
     data: CalendarUiModel,
@@ -532,6 +534,7 @@ fun ContentItem(
 }
 
 
+@RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BottomSheetTheme(
@@ -602,6 +605,7 @@ fun BottomSheetTheme(
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BottomSheetCalendar(
