@@ -17,6 +17,7 @@ import androidx.annotation.RequiresApi
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.core.graphics.createBitmap
@@ -29,10 +30,18 @@ import com.example.gymmate.data.dailytrack.DailyTrack
 import com.example.gymmate.data.dailytrack.DailyTrackRepository
 import com.example.gymmate.data.exercisedata.Exercise
 import com.example.gymmate.data.exercisedata.ExerciseRepository
+import com.example.gymmate.data.fooddata.FoodConsumptionEntity
+import com.example.gymmate.data.fooddata.FoodConsumptionRepository
 import com.example.gymmate.data.userdata.UserEntityRepository
 import com.example.gymmate.data.userdata.UserInstance
 import com.example.gymmate.data.userdata.UserInstance.currentUser
+import com.example.gymmate.data.weightdata.WeightEntity
+import com.example.gymmate.data.weightdata.WeightRepository
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import java.io.IOException
 import java.io.OutputStream
@@ -48,7 +57,10 @@ data class Recipe (
 class SummaryPageViewModel(
     val exerciseRepository: ExerciseRepository,
     val userEntityRepository: UserEntityRepository,
-    val dailyTrackRepository: DailyTrackRepository
+    val dailyTrackRepository: DailyTrackRepository,
+
+    private val foodConsumptionRepository: FoodConsumptionRepository,
+    private val weightRepository: WeightRepository
 ) : ViewModel() {
     val workouts = arrayOf("yoga", "Pilates", "Push-up", "Sit-up", "Aerobics", "Rope skipping")
     var workoutItemSelected by mutableStateOf(workouts[0])
@@ -59,6 +71,8 @@ class SummaryPageViewModel(
             .format(pickedTime)
     }
 
+
+
     var workoutDateSelected by mutableStateOf(GenerateWorkout.dayString[0])
 
     var openThemeSheet by mutableStateOf(false)
@@ -68,6 +82,47 @@ class SummaryPageViewModel(
     var email by mutableStateOf(currentUser!!.email)
     var weight by mutableFloatStateOf(currentUser!!.weight)
     var height by mutableFloatStateOf(currentUser!!.height)
+
+    val foodEntityUiState: StateFlow<FoodEntityUiState> =
+        foodConsumptionRepository.getAllFoodFromEmail(email).map {
+            FoodEntityUiState(it)
+        }
+            .stateIn(
+                scope = viewModelScope,
+                started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
+                initialValue = FoodEntityUiState()
+            )
+
+    val weightEntityUiState: StateFlow<WeightEntityUiState> =
+        weightRepository.getAllWeightFromEmail(email).map {
+            WeightEntityUiState(it)
+        }
+            .stateIn(
+                scope = viewModelScope,
+                started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
+                initialValue = WeightEntityUiState()
+            )
+
+    companion object {
+        private const val TIMEOUT_MILLIS = 5_000L
+    }
+
+    var foodList = mutableStateListOf<FoodConsumptionEntity>()
+    var weightList = mutableStateListOf<WeightEntity>()
+
+    fun createWeightList(tempWeightList: List<WeightEntity>) {
+        weightList.clear()
+        for(weight in tempWeightList){
+            weightList.add(weight)
+        }
+    }
+
+    fun createFoodList(tempFoodList: List<FoodConsumptionEntity>) {
+        foodList.clear()
+        for(food in tempFoodList){
+            foodList.add(food)
+        }
+    }
 
     fun addExercise() {
         val currentUser = UserInstance.currentUser
@@ -183,6 +238,7 @@ class SummaryPageViewModel(
                 maxSizeText = exerciseText
             }
         }
+
         paint.getTextBounds(maxSizeText, 0, maxSizeText.length, bounds)
 
         for (day in GenerateWorkout.dayString) {
@@ -207,10 +263,9 @@ class SummaryPageViewModel(
             yPos += bounds.height() + 10
         }
 
-        // draw the weight
         canvas.drawText("weight", xPos, yPos, paint)
-        yPos += bounds.height() + 10
 
+        yPos += bounds.height() + 10
         canvas.drawText(
             weight.toString() + "kg",
             xPos, yPos,
@@ -218,9 +273,6 @@ class SummaryPageViewModel(
         )
 
         bitmap.height = yPos.toInt() + 70
-//        bitmap.width = bounds.width() + 20
-//        canvas.drawBitmap(bitmap, Rect(0, 0, bitmap.width, bitmap.height),
-//            Rect(0, 0, bounds.width() + 20,  yPos.toInt() + 70), paint)
 
         try {
             return saveQUp(bitmap, context, filename, 80)
@@ -307,3 +359,7 @@ class SummaryPageViewModel(
         return dailyTrackRepository.getDailyAllTracks()
     }
 }
+
+
+data class FoodEntityUiState(val foodConsumptionList: List<FoodConsumptionEntity> = listOf())
+data class WeightEntityUiState(val weightList: List<WeightEntity> = listOf())

@@ -29,10 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.gymmate.AppViewModelProvider
 import com.example.gymmate.data.GenerateWorkout
-import com.example.gymmate.data.exercisedata.Exercise
 import com.example.gymmate.ui.theme.md_theme_light_background
-import com.example.gymmate.ui.theme.md_theme_light_primary
-import com.example.gymmate.ui.theme.md_theme_light_secondary
 import com.vanpra.composematerialdialogs.MaterialDialog
 import com.vanpra.composematerialdialogs.rememberMaterialDialogState
 

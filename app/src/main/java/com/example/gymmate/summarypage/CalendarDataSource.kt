@@ -1,6 +1,5 @@
 package com.example.gymmate.summarypage
 
-import com.example.gymmate.data.exercisedata.ExerciseDay
 import com.example.gymmate.data.userdata.UserInstance
 import java.time.DayOfWeek
 import java.time.LocalDate

@@ -8,7 +8,6 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -19,7 +18,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.gymmate.AppViewModelProvider
-import com.example.gymmate.data.userdata.UserInstance
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -33,8 +31,6 @@ fun InitializeUserPage(
 
     var loadingText by remember { mutableStateOf("") }
     var dotsCount by remember { mutableIntStateOf(0) }
-
-    println("loading page")
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,

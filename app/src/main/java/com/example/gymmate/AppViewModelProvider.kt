@@ -51,7 +51,9 @@ object AppViewModelProvider {
             SummaryPageViewModel(
                 gymmateApplication().container.exerciseRepository,
                 gymmateApplication().container.userEntityRepository,
-                gymmateApplication().container.dailyTrackRepository
+                gymmateApplication().container.dailyTrackRepository,
+                gymmateApplication().container.foodConsumptionRepository,
+                gymmateApplication().container.weightRepository
             )
         }
     }

@@ -13,16 +13,12 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.gymmate.caloriespage.CaloriesPage
-import com.example.gymmate.caloriespage.SearchFoodPage
 import com.example.gymmate.homepage.Homepage
 import com.example.gymmate.login.InitializeUserPage
 import com.example.gymmate.login.LoginPage
-import com.example.gymmate.questionpage.questions.EmailPage
-import com.example.gymmate.questionpage.questions.NamePage
 import com.example.gymmate.questionpage.QuestionPage
 import com.example.gymmate.summarypage.ChangeUserInfoScreen
 import com.example.gymmate.summarypage.SummaryPage
-import com.google.android.material.bottomappbar.BottomAppBar
 
 
 @RequiresApi(Build.VERSION_CODES.Q)

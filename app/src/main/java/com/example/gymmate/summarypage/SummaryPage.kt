@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -22,9 +21,7 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectable
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ChevronLeft
 import androidx.compose.material.icons.filled.ChevronRight
@@ -41,6 +38,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -60,7 +58,9 @@ import com.example.gymmate.GymmateNavigationBar
 import com.example.gymmate.GymmateRoute
 import com.example.gymmate.NavigationActions
 import com.example.gymmate.R
+import com.example.gymmate.data.fooddata.FoodConsumptionEntity
 import com.example.gymmate.data.userdata.UserInstance.currentUser
+import com.example.gymmate.data.weightdata.WeightEntity
 import com.example.gymmate.ui.theme.appThemeName
 import com.patrykandpatrick.vico.compose.axis.horizontal.rememberBottomAxis
 import com.patrykandpatrick.vico.compose.axis.vertical.rememberStartAxis
@@ -71,9 +71,7 @@ import com.patrykandpatrick.vico.core.chart.line.LineChart
 import com.patrykandpatrick.vico.core.entry.ChartEntryModelProducer
 import com.patrykandpatrick.vico.core.entry.FloatEntry
 import com.vanpra.composematerialdialogs.rememberMaterialDialogState
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
@@ -86,6 +84,13 @@ fun SummaryPage(
     navigationActions: NavigationActions,
     viewModel: SummaryPageViewModel = viewModel(factory = AppViewModelProvider.Factory),
 ) {
+    val foodEntityUiState by viewModel.foodEntityUiState.collectAsState()
+    val weightEntityUiState by viewModel.weightEntityUiState.collectAsState()
+
+    if (weightEntityUiState.weightList.isNotEmpty()) viewModel.createWeightList((weightEntityUiState.weightList))
+    if (foodEntityUiState.foodConsumptionList.isNotEmpty()) viewModel.createFoodList((foodEntityUiState.foodConsumptionList))
+
+
     val context = LocalContext.current
     LaunchedEffect(key1 = currentUser?.id) {
         viewModel.viewModelScope.launch {
@@ -95,7 +100,8 @@ fun SummaryPage(
 
     Column(
         modifier = Modifier
-            .fillMaxSize(),
+            .fillMaxSize()
+            .padding(5.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceBetween
     ) {
@@ -109,11 +115,14 @@ fun SummaryPage(
         ) {
             Spacer(modifier = Modifier.weight(.1f))
             WeightGraphCard(
+                weightEntityUiState.weightList,
                 modifier = Modifier
-                    .weight(1f)
+                    .weight(1f),
+                viewModel
             )
             Spacer(modifier = Modifier.weight(.1f))
             CaloriesGraphCard(
+                foodEntityUiState.foodConsumptionList,
                 modifier = Modifier
                     .weight(1f)
             )
@@ -138,8 +147,9 @@ fun SummaryPage(
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun WeightGraphCard(
+    weightList: List<WeightEntity>,
     modifier: Modifier = Modifier,
-    viewModel: SummaryPageViewModel = viewModel(factory = AppViewModelProvider.Factory)
+    viewModel: SummaryPageViewModel
 ) {
     Card(
         modifier = modifier
@@ -162,11 +172,21 @@ fun WeightGraphCard(
                         lineColor = Color.BLUE,
                     )
                 )
-
                 val allDailyTracks = viewModel.getAllDailyTracks()
+                /*
                 for (dailyTrack in allDailyTracks) {
                     dataPoints.add(FloatEntry(xPos, dailyTrack.weight))
                     xPos += 1f
+                }*/
+
+                var count = 1f
+                for (weight in viewModel.weightList) {
+                    dataPoints.add(
+                        FloatEntry(
+                            count++,
+                            weight.weight
+                        )
+                    )
                 }
 
                 datasetForModel.add(dataPoints)
@@ -212,6 +232,7 @@ fun WeightGraphCard(
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun CaloriesGraphCard(
+    foodList: List<FoodConsumptionEntity>,
     modifier: Modifier = Modifier,
     viewModel: SummaryPageViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
@@ -237,13 +258,21 @@ fun CaloriesGraphCard(
                         lineColor = Color.BLUE,
                     )
                 )
-
                 val allDailyTracks = viewModel.getAllDailyTracks()
+                /*
                 for (dailyTrack in allDailyTracks) {
                     dataPoints.add(FloatEntry(xPos, dailyTrack.calories.toFloat()))
                     xPos += 1f
+                }*/
+                var count = 1f
+                for (food in viewModel.foodList) {
+                    dataPoints.add(
+                        FloatEntry(
+                            count++,
+                            food.calories
+                        )
+                    )
                 }
-
                 datasetForModel.add(dataPoints)
                 modelProducer.setEntries(datasetForModel)
             }
@@ -308,10 +337,12 @@ fun BottomButton(
                 Modifier
                     .fillMaxWidth()
                     .weight(1f)
+                    .padding(end = 5.dp)
             )
 
             Button(
-                modifier = Modifier.weight(1f),
+                modifier = Modifier.weight(1f)
+                    .padding(start = 5.dp),
                 onClick = {
                     navigationActions.navController.navigate(GymmateRoute.ALARM_PAGE)
                 }
@@ -328,7 +359,8 @@ fun BottomButton(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Button(
-                modifier = Modifier.weight(1f),
+                modifier = Modifier.weight(1f)
+                    .padding(end = 5.dp),
                 onClick = {
                     navigationActions.navController.navigate(GymmateRoute.CHANGE_USER_INFO)
                 }
@@ -337,7 +369,8 @@ fun BottomButton(
             }
 
             Button(
-                modifier = Modifier.weight(1f),
+                modifier = Modifier.weight(1f)
+                    .padding(start = 5.dp),
                 onClick = {
                     viewModel.setDownload(context)
                 }
@@ -372,7 +405,8 @@ fun BottomButton(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Button(
-                modifier = Modifier.weight(1f),
+                modifier = Modifier.weight(1f)
+                    .padding(end = 5.dp),
                 onClick = {
                     viewModel.openCalendarSheet = !viewModel.openCalendarSheet
                 }
@@ -380,7 +414,8 @@ fun BottomButton(
                 Text("Show Calendar")
             }
             Button(
-                modifier = Modifier.weight(1f),
+                modifier = Modifier.weight(1f)
+                    .padding(start = 5.dp),
                 onClick = {
                     viewModel.openThemeSheet = !viewModel.openThemeSheet
                 }
@@ -522,7 +557,7 @@ fun ContentItem(
                 modifier = Modifier.align(Alignment.CenterHorizontally),
                 style = MaterialTheme.typography.bodyMedium,
             )
-            if(date.hasExercise) {
+            if (date.hasExercise) {
                 Text(
                     text = "exercise",
                     modifier = Modifier.align(Alignment.CenterHorizontally),
@@ -532,7 +567,6 @@ fun ContentItem(
         }
     }
 }
-
 
 @RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
@@ -546,7 +580,7 @@ fun BottomSheetTheme(
         skipPartiallyExpanded = false
     )
     if (viewModel.openThemeSheet) {
-        val windowInsets =  BottomSheetDefaults.windowInsets
+        val windowInsets = BottomSheetDefaults.windowInsets
 
         var themeList = listOf<String>("red", "yellow", "blue")
         //var appTheme by remember { mutableStateOf(AppTheme.System) }
@@ -559,7 +593,7 @@ fun BottomSheetTheme(
             windowInsets = windowInsets
         ) {
 
-            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center){
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
                 Text(text = "Click box to change theme")
             }
             LazyRow(
@@ -567,9 +601,10 @@ fun BottomSheetTheme(
                     .fillMaxWidth()
                     .height(200.dp)
                     .padding(10.dp),
-                verticalAlignment=
+                verticalAlignment =
                 Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center) {
+                horizontalArrangement = Arrangement.Center
+            ) {
 
                 items(items = themeList) { item ->
 
@@ -592,11 +627,14 @@ fun BottomSheetTheme(
                                         selectedItem = item
                                         appThemeName.value = item
                                     }
-                                })
-                        ,
-                        contentAlignment =  Alignment.Center
+                                }),
+                        contentAlignment = Alignment.Center
                     ) {
-                        Text(text = item, color = androidx.compose.ui.graphics.Color.White, fontSize = 20.sp)
+                        Text(
+                            text = item,
+                            color = androidx.compose.ui.graphics.Color.White,
+                            fontSize = 20.sp
+                        )
                     }
                 }
             }
@@ -617,7 +655,7 @@ fun BottomSheetCalendar(
         skipPartiallyExpanded = false
     )
     if (viewModel.openCalendarSheet) {
-        val windowInsets =  BottomSheetDefaults.windowInsets
+        val windowInsets = BottomSheetDefaults.windowInsets
 
 
         ModalBottomSheet(
@@ -626,9 +664,11 @@ fun BottomSheetCalendar(
             windowInsets = windowInsets
         ) {
 
-            Column(Modifier.fillMaxWidth(),
+            Column(
+                Modifier.fillMaxWidth(),
                 verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally){
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
                 Text(text = "Calandar")
                 CalendarApp()
             }
@@ -636,5 +676,4 @@ fun BottomSheetCalendar(
         }
     }
 }
-
 

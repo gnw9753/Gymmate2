@@ -5,7 +5,6 @@ import androidx.annotation.RequiresApi
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
-
 data class CalendarUiModel(
     val selectedDate: Date,
     val visibleDates: List<Date>

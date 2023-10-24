@@ -6,6 +6,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.Divider
@@ -44,12 +46,18 @@ fun QuickAddCard(
                     .fillMaxWidth()
             )
             Divider(modifier = Modifier.padding(5.dp))
+            var quickAddFoodList: MutableList<FoodConsumptionEntity> = mutableListOf()
             var count = 0
             for (food in foodList) {
                 if (count > 2) break
                 food?.let {
-                    QuickAddRow(viewModel, food = it)
+                        quickAddFoodList.add(food)
                     count++
+                }
+            }
+            LazyColumn(modifier = Modifier){
+                items(quickAddFoodList) { foodItem ->
+                    QuickAddRow(viewModel = viewModel, food = foodItem)
                 }
             }
         }
