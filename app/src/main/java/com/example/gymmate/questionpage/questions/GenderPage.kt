@@ -78,7 +78,7 @@ fun GenderPage(viewModel: QuestionPageViewModel, modifier: Modifier = Modifier) 
                 modifier = Modifier
                     .padding(top = 5.dp, start = 5.dp, end = 5.dp)
             ) {
-                Text("Burger")
+                Text("Other")
             }
         }
         TextButton(

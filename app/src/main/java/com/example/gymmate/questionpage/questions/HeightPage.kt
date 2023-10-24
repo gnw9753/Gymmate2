@@ -38,6 +38,8 @@ fun HeightPage(viewModel: QuestionPageViewModel, modifier: Modifier = Modifier) 
                 viewModel.height = it
             },
             label = { Text("Enter your height") },
+            placeholder = { Text("cm") },
+
             keyboardOptions = KeyboardOptions.Default.copy(
                 keyboardType = KeyboardType.Number,
                 imeAction = ImeAction.Done

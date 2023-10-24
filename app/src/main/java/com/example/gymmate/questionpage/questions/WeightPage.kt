@@ -41,6 +41,7 @@ fun WeightPage(viewModel: QuestionPageViewModel) {
                 keyboardType = KeyboardType.Number,
                 imeAction = ImeAction.Done
             ),
+            placeholder = { Text("kg") },
             isError = isError,
             keyboardActions = KeyboardActions(
                 onDone = {
